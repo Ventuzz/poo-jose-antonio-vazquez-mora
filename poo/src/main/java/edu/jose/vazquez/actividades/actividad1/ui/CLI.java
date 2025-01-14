@@ -5,5 +5,6 @@ public class CLI {
         System.out.println("Bienvenido al menu");
         System.out.println("1. Mostrar registros");
         System.out.println("2. mostrar autos"); 
+        System.out.println("3. salir");
     }
 }
