@@ -2,48 +2,47 @@ package edu.jose.vazquez.actividades.actividad1.ui;
 
 import java.util.Scanner;
 
+import edu.jose.vazquez.actividades.actividad1.process.StockManager;
+
 public class CLI {
-    public static void ShowMenu() {
-        System.out.println("Bienvenido al menu");
-        System.out.println("1. Mostrar registros");
-        System.out.println("2. mostrar autos"); 
-        System.out.println("3. salir o cerrar");
-    }
-
-    public void mostrarMensaje(String mensaje){
-        System.out.println(mensaje);
-    }
-
-    public void mostrarError(String mensaje){
-        System.out.println("Error: "+ mensaje);
-    }
-
-    public void mostrarcarro(String[] carroStrings){
-        for (String carro: carroStrings){
-            System.out.println(carroStrings);
-        }
-    }
-
-    public static void launch(){
-        ShowMenu();
+    public static void runApp() {
         Scanner scanner = new Scanner(System.in);
-        int opcion = scanner.nextInt();
-        while (opcion!=3) {
+        StockManager stockManager = new StockManager();
+        ShowMenu();
+        int opcion = scanner.nextInt();scanner.nextLine();
+        
+        while (opcion !=3) {
             switch (opcion) {
                 case 1:
-                    System.out.println("agregar un nuevo auto");
+                    System.out.println("Introduce el número de puertas");
+                    int numPuertas = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Introduce el modelo");
+                    String modelo = scanner.nextLine();
+                    System.out.println("Introduce la marca");
+                    String marca = scanner.nextLine();
+                    System.out.println("Introduce el color");
+                    String color = scanner.nextLine();
+                    stockManager.addCarro(modelo, marca, numPuertas, color);
                     break;
                 case 2:
-                    System.out.println("lista de autos");
+                    stockManager.printStock();
                     break;
                 default:
-                    System.out.println("opción invalida");
+                    System.out.println("Opción inválida");
                     break;
             }
-
-            //logica de creación del objeto carro
             ShowMenu();
-            opcion=scanner.nextInt();
+            opcion = scanner.nextInt();
         }
+    }
+
+    public static void ShowMenu(){
+        System.out.println("""
+                Menu
+                1.- Agregar carro
+                2.- Ver stock
+                3.- Salir
+                """);
     }
 }
