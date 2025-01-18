@@ -14,19 +14,19 @@ public class CLI {
         while (opcion !=3) {
             switch (opcion) {
                 case 1:
-                    System.out.println("Introduce el número de puertas");
-                    int numPuertas = scanner.nextInt();
-                    scanner.nextLine();
+                    System.out.println("Introduce la placa");
+                    String placa = scanner.nextLine();
                     System.out.println("Introduce el modelo");
                     String modelo = scanner.nextLine();
                     System.out.println("Introduce la marca");
                     String marca = scanner.nextLine();
                     System.out.println("Introduce el color");
                     String color = scanner.nextLine();
-                    stockManager.addCarro(modelo, marca, numPuertas, color);
+                    stockManager.addCarro(modelo, marca, placa, color);
                     break;
                 case 2:
-                    stockManager.printStock();
+                    System.out.println("El catalogo actual es: ");
+                    stockManager.getStock().forEach(System.out::println);
                     break;
                 default:
                     System.out.println("Opción inválida");
@@ -34,6 +34,7 @@ public class CLI {
             }
             ShowMenu();
             opcion = scanner.nextInt();
+            scanner.nextLine();
         }
     }
 
