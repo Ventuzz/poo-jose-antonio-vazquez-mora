@@ -6,14 +6,17 @@ public class Car {
     private String placa;
     private String color;
 
-    public String toString(){
-        return "carro{" +
-            "modelo='" + modelo + '\''+
-            ", marca='" + marca + '\''+
-            ", placa=" + placa +
-            ", color='" + color + '\''+
-            '}';
-        }
+    public String toString() {
+        return "╔═══════════════════╗\n" +
+               "║       Carro       ║\n" +
+               "╚═══════════════════╝\n" +
+               "╔═══════════════════╗\n" +
+               "║ Modelo : " + modelo + "    ║\n" +
+               "║ Marca  : " + marca + "   ║\n" +
+               "║ Placa  : " + placa + "    ║\n" +
+               "║ Color  : " + color + "     ║\n" +
+               "╚═══════════════════╝";
+    }
     
     public Car(String modelo, String marca, String placa, String color){
         this.modelo = modelo;

@@ -53,11 +53,11 @@ public class CLI {
 
     public static void ShowMenu(){
         System.out.println("╔════════════════════════════════╗");
-        System.out.println("║            MENÚ                ║");
+        System.out.println("║              MENÚ              ║");
         System.out.println("╠════════════════════════════════╣");
-        System.out.println("║  1. Agregar carro              ║");
-        System.out.println("║  2. Ver stock                  ║");
-        System.out.println("║  3. Salir                      ║");
+        System.out.println("║        1. Agregar carro        ║");
+        System.out.println("║        2. Ver stock            ║");
+        System.out.println("║        3. Salir                ║");
         System.out.println("╚════════════════════════════════╝");
         System.out.print("Seleccione una opción: ");
 
