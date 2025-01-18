@@ -42,7 +42,7 @@ public class CLI {
                     System.out.println("╚════════════════════╝");
                     String color = scanner.nextLine();
 
-                    stockManager.addCarro(modelo, marca, placa, color);
+                    stockManager.addCar(modelo, marca, placa, color);
                     System.out.println("╔════════════════════════════╗");
                     System.err.println("║  Carro agregado con exito  ║");
                     System.out.println("╚════════════════════════════╝");
