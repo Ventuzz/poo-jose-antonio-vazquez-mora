@@ -27,7 +27,7 @@ public class StockManager {
      * @param color
      */
 
-    public void addCarro(String modelo, String marca, String placa, String color){
+    public void addCar(String modelo, String marca, String placa, String color){
         Car newCarro = new Car(modelo, marca, placa, color);
         stock.add(newCarro);
     }
