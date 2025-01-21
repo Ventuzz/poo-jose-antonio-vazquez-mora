@@ -1,27 +1,18 @@
 package edu.jose.vazquez.actividades.actividad2.models;
 
 public class Name {
-    private String firstName;
-    private String lastName;
+    private String name;
+    public static String[] nombres= {"Jose", "Maria", "Pedro", "Ana", "Juan", "Luis", "Carlos", "Sofia", "Fernanda", "Ricardo"};
 
-    public Name(String firstName, String lastName){
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Name(String name) {
+        this.name = name;
     }
 
-    public String getFirstName(){
-        return this.firstName;
+    public String getName() {
+        return name;
     }
 
-    public String getLastName(){
-        return this.lastName;
-    }
-
-    public void setFirstName(String firstName){
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName){
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 }
