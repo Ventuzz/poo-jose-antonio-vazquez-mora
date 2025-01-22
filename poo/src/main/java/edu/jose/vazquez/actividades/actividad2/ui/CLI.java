@@ -4,7 +4,9 @@ import java.util.Scanner;
 import edu.jose.vazquez.actividades.actividad2.process.NameValidator;
 import edu.jose.vazquez.actividades.actividad2.models.Number;
 
+//Clase que muestra el menú de opciones al usuario en la terminal y ejecuta las acciones correspondientes a cada opción, como validar nombres y generar números pares
 public class CLI {
+    //método que inicia la aplicación y muestra el menú de opciones al usuario en la terminal 
     public static void runApp() {
         Scanner scanner = new Scanner(System.in);
         int[] numerosPares = Number.generarNumerosPares();
@@ -23,19 +25,19 @@ public class CLI {
                         System.out.println("╔═════════════════════════════════════════════════════╗");
                         System.out.println("║ Tu nombre ya se encuentra registrado, ¡Felicidades! ║");
                         System.out.println("╚═════════════════════════════════════════════════════╝");
-                    } else {
+                    } else {  
                         System.out.println("╔═════════════════════════════════════════════════════╗");
                         System.out.println("║ Tu nombre no se encuentra registrado, ¡Mala suerte! ║");
                         System.out.println("╚═════════════════════════════════════════════════════╝");
                     }
                     break;
                 case 2:
-                    //genera los números pares del 2 al 100
+                    //genera los números pares del 2 al 100 y los muestra en la terminal
                     System.out.println("╔═══════════════════════════════════════════════════════╗");
                     System.out.println("║  En 100 números los siguientes son los números pares: ║");
                     System.out.println("╚═══════════════════════════════════════════════════════╝");
                     numerosPares = Number.generarNumerosPares();
-                    Number.mostrarNumeros(numerosPares);
+                    mostrarNumeros(numerosPares);
                     System.out.println();
                     break;
                 default:
@@ -45,7 +47,7 @@ public class CLI {
                     System.out.println("╚═══════════════════╝");
                     break;
             }
-            //vuelve a mostrar el menú
+            //vuelve a mostrar el menú despues de que el usuario selecciona una opción
             showMenu();
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -57,6 +59,20 @@ public class CLI {
 
 
     }
+
+    //muestra los números pares del 2 al 100 al usuario en un formato de 10 números por fila
+    public static void mostrarNumeros(int[] numeros) {
+        System.out.println("╔═════════════════════════════╗");
+        System.out.println("║ Números pares del 2 al 100: ║");
+        System.out.println("╚═════════════════════════════╝");
+        for (int i=0; i< numeros.length; i++){ 
+            System.out.printf("%6d",numeros[i]);
+            if((i+1)%10==0){
+                System.out.println();
+            }
+        }
+    }
+    //muestra el menú de opciones al usuario en la terminal
     public static void showMenu(){
         System.out.println("╔════════════════════════════════╗");
         System.out.println("║              MENÚ              ║");
