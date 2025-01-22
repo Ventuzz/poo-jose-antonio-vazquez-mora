@@ -1,10 +1,11 @@
 package edu.jose.vazquez.actividades.actividad2.models;
 
-public class Name {
+//Clase que almacena los nombres de las personas y los métodos para acceder a ellos
+public class Data {
     private String name;
     public static String[] nombres= {"Jose", "Maria", "Pedro", "Ana", "Juan", "Luis", "Carlos", "Sofia", "Fernanda", "Ricardo"};
 
-    public Name(String name) {
+    public Data(String name) {
         this.name = name;
     }
 
