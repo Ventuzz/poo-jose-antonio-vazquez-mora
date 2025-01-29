@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 import edu.jose.vazquez.actividades.actividad3.models.Product;
 import edu.jose.vazquez.actividades.actividad3.process.ProductCalculator;
-import edu.jose.vazquez.actividades.actividad3.process.StoreManager;
+import edu.jose.vazquez.actividades.actividad3.process.StoreStockManager;
 
 public class CLI {
 
         public static void runApp() {
         Scanner scanner = new Scanner(System.in);
-        StoreManager StoreManager = new StoreManager();
+        StoreStockManager StoreManager = new StoreStockManager();
         showMenu();
         int opcion = scanner.nextInt();scanner.nextLine();    
         
@@ -18,6 +18,42 @@ public class CLI {
             switch (opcion) {
                 case 1:
                     System.out.println("╔══════════════════════════════════╗");
+                    System.out.println("║ Introduce el valor del producto  ║");
+                    System.out.println("╚══════════════════════════════════╝");
+                    double price = -1;
+                    while (price < 0) {
+                        try {
+                            System.out.print("Precio: ");
+                            price = Double.parseDouble(scanner.nextLine());
+                            if (price < 0) {
+                                System.out.println("Error: El precio no puede ser negativo. Inténtalo de nuevo.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error: Ingresa un número válido.");
+                        }
+                    }
+                    System.out.println("╔═══════════════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ Introduce el porcentaje de utilidad que quieres obtener del producto  ║");
+                    System.out.println("╚═══════════════════════════════════════════════════════════════════════╝");
+                    double utility = -1;
+                    while (utility < 0) {
+                        try {
+                            System.out.print("Utilidad (%): ");
+                            utility = Double.parseDouble(scanner.nextLine());
+                            if (utility < 0) {
+                                System.out.println("Error: La utilidad no puede ser negativa. Inténtalo de nuevo.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error: Ingresa un número válido.");
+                        }
+                    }
+                    double finalPrice = ProductCalculator.priceCalculator(price, utility);
+                    System.out.println("╔════════════════════════════════════════════╗");
+                    System.out.println("║ El precio final del producto es: " + finalPrice + " ║"); 
+                    System.out.println("╚════════════════════════════════════════════╝");
+                    break;
+/** 
+ * System.out.println("╔══════════════════════════════════╗");
                     System.out.println("║ Introduce el valor del producto  ║");
                     System.out.println("╚══════════════════════════════════╝");
                     double price = scanner.nextDouble();
@@ -30,6 +66,8 @@ public class CLI {
                     System.out.println(  "║ El precio final del producto es: " + finalPrice + "     ║"); 
                     System.out.println("╚════════════════════════════════════════════╝");
                     break;
+ */
+                    
                 case 2:
                     System.out.println("╔═════════════════════════════════╗");
                     System.out.println("║  Ingresa el costo del producto: ║");
@@ -66,13 +104,23 @@ public class CLI {
                     System.out.println("╔═════════════════════════╗");
                     System.out.println("║  El catalogo actual es: ║");
                     System.out.println("╚═════════════════════════╝");
-                    
-                    StoreManager.getProducts().forEach(System.out::println);
+                    StoreManager.getProducts().forEach(CLI::showProduct);
+
                     break;
                 case 4:
                     System.out.println("╔═════════════════════════╗");
                     System.out.println("║  Comparar productos     ║");
                     System.out.println("╚═════════════════════════╝");
+                    if (StoreManager.getProducts().size() < 2) {
+                        System.out.println("╔══════════════════════════════════════════════╗");
+                        System.out.println("║  No hay suficientes productos para comparar  ║");
+                        System.out.println("╚══════════════════════════════════════════════╝");
+                        break;
+                    } else if (StoreManager.getProducts().size() > 2) {
+                        System.out.println("╔════════════════════════════════════════════╗");
+                        System.out.println("║  Se compararán los primeros dos productos  ║");
+                        System.out.println("╚════════════════════════════════════════════╝");
+                    }
                     compararProductos(StoreManager.getProducts().get(0), StoreManager.getProducts().get(1));
                     System.out.println(compararProductos(StoreManager.getProducts().get(0), StoreManager.getProducts().get(1)));
                     break;
@@ -101,6 +149,19 @@ public class CLI {
         } else {
             return "Los productos tienen el mismo precio";
         }
+    }
+
+    public static void showProduct(Product product) {
+        System.out.println("╔═══════════════════╗");
+        System.out.println("║ Producto          ║");
+        System.out.println("╚═══════════════════╝");
+        System.out.println("╔═══════════════════╗");
+        System.out.println("  ║ Descripción: " + product.getDescription() + "║");
+        System.out.println("  ║ Precio: " + product.getPrice() + "║");
+        System.out.println("  ║ Código: " + product.getCode() + "║");
+        System.out.println("  ║ Tipo: " + product.getType() + "║");
+        System.out.println("  ║ Impuesto: " + product.getTax() + "║");
+        System.out.println("╚═══════════════════╝");
     }
 
     public static void showMenu(){

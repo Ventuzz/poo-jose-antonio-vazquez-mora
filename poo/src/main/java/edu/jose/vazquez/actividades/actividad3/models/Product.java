@@ -8,14 +8,15 @@ public class Product {
     private double tax;
 
     public Product(String description, double price, String code, String type, double tax) {
-        this.description = description;
-        this.price = price;
-        this.code = code;
-        this.type = type;
-        this.tax = tax;
+        setDescription(description);
+        setPrice(price);
+        setCode(code);
+        setType(type);
+        setTax(tax);
     }
 
-    public String toString() {
+    /**
+     *     public String toString() {
         return "╔═══════════════════╗\n" +
                "║ Producto          ║\n" +
                "╚═══════════════════╝\n" +
@@ -27,19 +28,10 @@ public class Product {
                "║ Impuesto: " + tax + " ║\n" +
                "╚═══════════════════════╝";
     }
+     */
 
-    public void showProduct() {
-        System.out.println("╔═══════════════════╗");
-        System.out.println("║ Producto          ║");
-        System.out.println("╚═══════════════════╝");
-        System.out.println("╔═══════════════════╗");
-        System.out.println("  ║ Descripción: " + description + "║");
-        System.out.println("  ║ Precio: " + price + "║");
-        System.out.println("  ║ Código: " + code + "║");
-        System.out.println("  ║ Tipo: " + type + "║");
-        System.out.println("  ║ Impuesto: " + tax + "║");
-        System.out.println("╚═══════════════════╝");
-    }
+
+
 
     public String getDescription() {
         return description;
@@ -62,22 +54,37 @@ public class Product {
     }
 
     public void setDescription(String description) {
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("La descripción no puede estar vacía.");
+        }
         this.description = description;
     }
 
     public void setPrice(double price) {
+        if (price < 0) {
+            throw new IllegalArgumentException("El precio no puede ser negativo.");
+        }
         this.price = price;
     }
 
     public void setCode(String code) {
+        if (code == null || code.trim().isEmpty()) {
+            throw new IllegalArgumentException("El código no puede estar vacío.");
+        }
         this.code = code;
     }
 
     public void setType(String type) {
+        if (type == null || type.trim().isEmpty()) {
+            throw new IllegalArgumentException("El tipo no puede estar vacío.");
+        }
         this.type = type;
     }
 
     public void setTax(double tax) {
+        if (tax < 0) {
+            throw new IllegalArgumentException("El impuesto no puede ser negativo.");
+        }
         this.tax = tax;
     }
 

@@ -3,10 +3,10 @@ import edu.jose.vazquez.actividades.actividad3.models.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoreManager {
+public class StoreStockManager {
      ArrayList<Product> products;
         
-            public StoreManager(){
+            public StoreStockManager(){
                 this.products = new ArrayList<>();
             }
         
