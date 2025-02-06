@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 public class Users {
 
-    ArrayList<String> borrowedBooks;
+    public ArrayList<String> borrowedBooks;
     private String username;
     private String password;
 
     public Users(String username, String password) {
         setUsername(username);
         setPassword(password);
-        ArrayList<String> borrowedBooks= new ArrayList<>();
+        borrowedBooks= new ArrayList<>();
     }
 
     public void lendBook(String book){
@@ -19,6 +19,10 @@ public class Users {
     }
     public void returnBook(String book){
         borrowedBooks.remove(book);
+    }
+
+    public ArrayList<String> getBorrowedBooks(){
+        return(borrowedBooks);
     }
 
     public String getUsername() {

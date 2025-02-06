@@ -346,7 +346,36 @@ static UserManager userManager = new UserManager();
             }
     }
 
+    private static void lendBook(Scanner scanner, String loggedUser){
+        String title = scanner.nextLine().trim();
+        boolean bookFound = false;
+        for(Book book: bookManager.getBooks()){
+            if (book.getTitle().equalsIgnoreCase(title) && book.getAvailable()){
+                book.setAvailable(false);
+                userManager.lendBookToUser(loggedUser, title);
+                System.out.println("libro prestado con éxito");
+                bookFound =true;
+                break;
+            }
+        }
+        if (!bookFound) {
+            System.out.println("el libro no esta disponible");
+        }
+    }
 
+    private static void showActiveLoans(String loggedUser){
+        System.out.println("estos son los libros que tienes prestados");
+        ArrayList<String> borrowedBooks= userManager.getBorrowedBooks(loggedUser);
+        if (borrowedBooks.isEmpty()) {
+            System.out.println("No tienes prestamos activos");
+        } else{
+            for(String bookTitle : borrowedBooks){
+                System.out.println(bookTitle);
+            }
+        }
+        System.out.println(borrowedBooks);
+    }
+    
     public static void UserMenu() {
         System.out.println("╔══════════════════════════════════════════════╗");
         System.out.println("║                    MENÚ                      ║");
@@ -403,13 +432,13 @@ static UserManager userManager = new UserManager();
                     System.out.println("╔═════════════════════════════════════════════════════════╗");
                     System.out.println("║  Ingresa el nombre del libro que quieres pedir prestado ║");
                     System.out.println("╚═════════════════════════════════════════════════════════╝");
-                    
-
+                    lendBook(scanner, userInput);
                     break;
                 case 3:
                     System.out.println("╔════════════════════════════════════════════════╗");
                     System.out.println("║  Estos son los libros que has pedido prestados ║");
                     System.out.println("╚════════════════════════════════════════════════╝");
+                    showActiveLoans(userInput);
                     break;
                 case 4:
                     System.out.println("╔═════════════════════════╗");

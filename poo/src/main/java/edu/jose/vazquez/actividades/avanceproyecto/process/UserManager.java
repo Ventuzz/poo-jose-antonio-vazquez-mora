@@ -35,7 +35,24 @@ public class UserManager {
         return users.size() > 0 && users.get(0).getUsername().equals(username);
     }
     
+    public void lendBookToUser(String username, String bookTitle){
+        for(Users user : users){
+            if (user.getUsername().equals(username)) {
+                user.lendBook(bookTitle);
+                break;
+            }
+        }
+    }
 
+    public ArrayList<String> getBorrowedBooks(String username){
+        for(Users user : users){
+            if (user.getUsername().equals(username)) {
+                return user.borrowedBooks;
+
+            }
+        }
+        return new ArrayList<>();
+    }
 }
 
 
