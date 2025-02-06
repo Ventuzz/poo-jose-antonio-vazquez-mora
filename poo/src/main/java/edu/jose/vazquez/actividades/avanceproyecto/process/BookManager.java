@@ -8,6 +8,7 @@ public class BookManager {
 
     public BookManager(){
         this.books = new ArrayList<>();
+        addBook("juego de tronos", "sadasd", "asdasd", true, 2008, "fantasia");
     }
 
     public void addBook(String title, String author, String isbn, boolean available, int year, String genre){
@@ -18,5 +19,8 @@ public class BookManager {
     public ArrayList<Book> getBooks(){
         return this.books;
     }
+
     
+    
+
 }

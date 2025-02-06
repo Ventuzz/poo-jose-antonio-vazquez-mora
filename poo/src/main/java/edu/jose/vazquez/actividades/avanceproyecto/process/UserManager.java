@@ -30,19 +30,12 @@ public class UserManager {
         }
         return false;
     }
+    
+    public boolean isFirstUser(String username) {
+        return users.size() > 0 && users.get(0).getUsername().equals(username);
+    }
+    
 
 }
-    /**
-     *     public static boolean validateName(String username, String password){
-        String storedName;
-        boolean isValid = false;
-        for(String nameToValidate: Users.){
-            if(nameToValidate.toLowerCase().equals(storedName)){
-                isValid = true;
-                break;
-            }
-        }
-        return isValid;
-    }
-    */
+
 

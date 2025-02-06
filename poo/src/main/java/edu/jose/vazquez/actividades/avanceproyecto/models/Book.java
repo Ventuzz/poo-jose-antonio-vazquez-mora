@@ -17,6 +17,22 @@ public class Book {
         setGenre(genre);
     }
 
+    public boolean available(){
+        if(!available){
+            available=false;
+            return false;
+        }
+        return true;
+    }
+
+    public boolean returnBook(){
+        if (available) {
+            available= true;
+            return true;
+        }
+        return false;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -55,9 +71,6 @@ public class Book {
     }
 
     public void setAvailable(boolean available) {
-        if (available == false ) {
-            throw new IllegalArgumentException("El libro no está disponible.");   
-        }
         this.available = available;
     }
 
