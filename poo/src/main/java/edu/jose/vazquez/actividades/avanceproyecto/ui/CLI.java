@@ -8,12 +8,15 @@ import edu.jose.vazquez.actividades.avanceproyecto.models.Users;
 import edu.jose.vazquez.actividades.avanceproyecto.process.BookManager;
 import edu.jose.vazquez.actividades.avanceproyecto.process.UserManager;
 
-
-
+/**    
+ * Esta clase es la encargada de manejar la interfaz de usuario de la aplicación   
+ */
 public class CLI {
 static BookManager bookManager = new BookManager();
 static UserManager userManager = new UserManager();
-
+            /**
+             * Método que se encarga de correr la aplicación
+             */
 
             public static void runApp() {
             Scanner scanner = new Scanner(System.in);
@@ -50,7 +53,10 @@ static UserManager userManager = new UserManager();
                     }
                 }
                 switch (opcion) {
-
+                    /**
+                     * Opción para registrarse en la aplicación
+                     * @return void
+                     */ 
                     case 1:
                         System.out.println("╔═══════════════════════════════════╗");
                         System.out.println("║ Introduce tu nombre de usuario    ║");
@@ -88,7 +94,10 @@ static UserManager userManager = new UserManager();
                         System.out.println("╚═════════════════════════════╝");
                         UserMenu();
                         break;
-   
+                    /**
+                    * Opción para iniciar sesión en la aplicación
+                    * @return void
+                    */
                     case 2:
                         System.out.println("╔═════════════════════════════════╗");
                         System.out.println("║  Excelente, Ingresa tu usuario: ║");
@@ -138,6 +147,10 @@ static UserManager userManager = new UserManager();
                             System.out.println("╚═══════════════════════════╝");
                         }
                         break;
+                    /**
+                    * Opción para salir de la aplicación
+                    * @return void
+                    */
                     case 3:
                     System.out.println("╔══════════╗");
                     System.out.println("║  Adiós!  ║");
@@ -152,7 +165,11 @@ static UserManager userManager = new UserManager();
     }
 
 
-
+    /**
+    * Método que se encarga de mostrar la información de un libro  
+    * @param book
+    * @return void
+    */
 
     public static void showBook(Book book) {
         System.out.println("╔═══════════════════╗");
@@ -166,7 +183,11 @@ static UserManager userManager = new UserManager();
         System.out.println("║ Disponibilidad: " + book.getAvailable() + " ║");
         System.out.println("╚═══════════════════╝");
     }
-
+    /**
+    * Método que se encarga de mostrar la información de un usuario
+    * @param user
+    * @return void
+    */
     public static void showUser(Users user){
         System.out.println("╔═══════════════════╗");
         System.out.println("║ Usuario: " + user.getUsername() + "   ║");
@@ -174,7 +195,10 @@ static UserManager userManager = new UserManager();
         System.out.println("╚═══════════════════╝");
     }
 
-
+    /**
+    * Método que se encarga de mostrar el menú principal de la aplicación
+    * @return void
+    */
     public static void showMenu(){
         System.out.println("╔═══════════════════════╗");
         System.out.println("║ Iniciar sesión        ║");
@@ -188,7 +212,10 @@ static UserManager userManager = new UserManager();
         System.out.println("║ 3. Salir              ║");
         System.out.println("╚═══════════════════════╝");
     }
-
+        /**
+         * Método que se encarga de mostrar el menú de usuario
+         * @return void
+         */  
     public static void AdminMenu(){
             Scanner scanner = new Scanner(System.in);
             int option = -1;
@@ -223,12 +250,20 @@ static UserManager userManager = new UserManager();
                 }
     
                 switch (option) {
+                    /**
+                    * Opción para mostrar las personas registradas en el sistema
+                    * @return void
+                    */
                     case 1:
                         System.out.println("╔══════════════════════════════════════════════╗");
                         System.out.println("║ Las personas registradas en el sistema son:  ║");
                         System.out.println("╚══════════════════════════════════════════════╝");
                         userManager.getUsers().forEach(CLI :: showUser);
                         break;
+                    /**
+                    * Opción para agregar un libro al catálogo
+                    * @return void
+                    */
                     case 2:
                         System.out.println("╔══════════════════════════════╗");
                         System.out.println("║ Ingresa el titulo del libro  ║");
@@ -327,16 +362,27 @@ static UserManager userManager = new UserManager();
                         System.err.println("║  ¡Libro agregado con exito al catálogo!  ║");
                         System.out.println("╚══════════════════════════════════════════╝");
                         break;
-
+                    /**
+                    * Opción para mostrar los libros disponibles en el catálogo
+                    * @return void
+                    */
                     case 3:
                         System.out.println("╔════════════════════════════════════════════╗");
                         System.out.println("║  Este es nuestro catálogo actual de libros ║");
                         System.out.println("╚════════════════════════════════════════════╝");
                         bookManager.getBooks().forEach(CLI::showBook);
                         break;
+                    /**
+                    * Opción para mostrar los préstamos activos
+                    * @return void
+                    */
                     case 4:
                         System.out.println("Mostrando préstamos activos...");
                         break;
+                    /**
+                    * Opción para salir del menú de administrador
+                    * @return void
+                    */
                     case 5:
                         System.out.println("╔══════════════════════════════════════╗");
                         System.out.println("║  Saliendo del menú de administrador  ║");
@@ -345,7 +391,11 @@ static UserManager userManager = new UserManager();
                 }
             }
     }
-
+    /**
+    * Método que se encarga de prestar un libro a un usuario           
+    * @param scanner
+    * @param loggedUser
+    */
     private static void lendBook(Scanner scanner, String loggedUser){
         String title = scanner.nextLine().trim();
         boolean bookFound = false;
@@ -362,7 +412,11 @@ static UserManager userManager = new UserManager();
             System.out.println("el libro no esta disponible");
         }
     }
-
+    /**
+    * Método que se encarga de mostrar los libros que tiene un usuario prestados
+    * @param loggedUser
+    * @return void
+    */
     private static void showActiveLoans(String loggedUser){
         System.out.println("estos son los libros que tienes prestados");
         ArrayList<String> borrowedBooks= userManager.getBorrowedBooks(loggedUser);
@@ -375,7 +429,10 @@ static UserManager userManager = new UserManager();
         }
         System.out.println(borrowedBooks);
     }
-    
+    /**
+    * Método que se encarga de mostrar el menú de usuario
+    * @return void
+    */
     public static void UserMenu() {
         System.out.println("╔══════════════════════════════════════════════╗");
         System.out.println("║                    MENÚ                      ║");
@@ -416,6 +473,10 @@ static UserManager userManager = new UserManager();
             }
     
             switch (option) {
+                /**
+                * Opción para mostrar los libros disponibles en el catálogo
+                * @return void
+                */
                 case 1:
                     System.out.println("╔════════════════════════════════════════════╗");
                     System.out.println("║  Este es nuestro catálogo actual de libros ║");
@@ -428,18 +489,30 @@ static UserManager userManager = new UserManager();
                     }
 
                     break;
+                /**
+                * Opción para solicitar el préstamo de un libro
+                * @return void
+                */
                 case 2:
                     System.out.println("╔═════════════════════════════════════════════════════════╗");
                     System.out.println("║  Ingresa el nombre del libro que quieres pedir prestado ║");
                     System.out.println("╚═════════════════════════════════════════════════════════╝");
                     lendBook(scanner, userInput);
                     break;
+                /**
+                * Opción para mostrar los préstamos activos
+                * @return void
+                */
                 case 3:
                     System.out.println("╔════════════════════════════════════════════════╗");
                     System.out.println("║  Estos son los libros que has pedido prestados ║");
                     System.out.println("╚════════════════════════════════════════════════╝");
                     showActiveLoans(userInput);
                     break;
+                /**
+                * Opción para salir del menú de usuario
+                * @return void
+                */
                 case 4:
                     System.out.println("╔═════════════════════════╗");
                     System.out.println("║  Saliendo de tu cuenta  ║");

@@ -8,6 +8,15 @@ public class Book {
     private int year;
     private String genre;
 
+       /**
+    * Constructor de la clase Book que inicializa los atributos de la clase 
+    * @param title
+    * @param author
+    * @param isbn
+    * @param available
+    * @param year
+    * @param genre
+   */
     public Book(String title, String author, String isbn, boolean available, int year, String genre) {
         setTitle(title);
         setAuthor(author);
@@ -16,7 +25,10 @@ public class Book {
         setYear(year);
         setGenre(genre);
     }
-
+  /**
+        * Método que comprueba si el libro está disponible
+        * @return available
+        */
     public boolean available(){
         if(!available){
             available=false;
@@ -24,7 +36,10 @@ public class Book {
         }
         return true;
     }
-
+     /**
+  * Método que devuelve el título del libro
+  * @return title
+ */
     public boolean returnBook(){
         if (available) {
             available= true;
@@ -32,18 +47,27 @@ public class Book {
         }
         return false;
     }
-
+ /**
+  * Método que devuelve el título del libro
+  * @return title
+ */
     public String getTitle() {
         return title;
     }
-
+   /**
+    * Método que lanza una expeción si el título está vacío
+    * @param title
+   */
     public void setTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("El título no puede estar vacío.");
         }
         this.title = title;
     }
-
+    /**
+     * Método que toma el autor del libro y lo devuelve
+     * @return author
+    */
     public String getAuthor() {
         return author;
     }
