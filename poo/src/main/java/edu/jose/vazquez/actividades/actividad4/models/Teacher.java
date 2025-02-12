@@ -1,16 +1,20 @@
 package edu.jose.vazquez.actividades.actividad4.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Teacher {
     private String name;
     private String payroll;
     private Double salary;
-    private String subject;
+    private List<Topic> topics;
+    private boolean isAvailable;
 
-    public Teacher(String name, String payroll, Double salary, String subject) {
+    public Teacher(String name, Double salary, String payroll ) {
         setName(name);
         setPayroll(payroll);
         setSalary(salary);
-        setSubject(subject);
+        this.topics = new ArrayList<>();
     }
     
     public String getName() {
@@ -46,14 +50,24 @@ public class Teacher {
         this.salary = salary;
     }
 
-    public String getSubject() {
-        return subject;
+    public List<Topic> getTopics() {
+        return topics;
     }
 
-    public void setSubject(String subject) {
-        if (subject == null) {
-            throw new IllegalArgumentException("Subject cannot be null");
-        }
-        this.subject = subject;
+    public void addTopic(Topic topic) {
+        topics.add(topic);
     }
+
+    public String toString() {
+        return "Teacher: " + name + " Payroll: " + payroll + " Salary: " + salary + " Topics: " + topics;
+    }
+
+    public boolean getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
 }

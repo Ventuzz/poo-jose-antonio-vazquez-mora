@@ -1,8 +1,6 @@
 package edu.jose.vazquez.actividades.actividad4.ui;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -12,7 +10,6 @@ import edu.jose.vazquez.actividades.actividad4.lang.Lang;
 import edu.jose.vazquez.actividades.actividad4.models.Course;
 import edu.jose.vazquez.actividades.actividad4.models.Student;
 import edu.jose.vazquez.actividades.actividad4.models.Teacher;
-import edu.jose.vazquez.actividades.actividad4.models.Topic;
 import edu.jose.vazquez.actividades.actividad4.process.SchoolManager;
 
 public class CLI {
@@ -250,6 +247,7 @@ public class CLI {
         }
     }
 
+    
     public static void makeCourse(){
         Scanner scanner = new Scanner(System.in);
         System.out.println(lang.course_name_headliner);

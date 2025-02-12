@@ -1,16 +1,28 @@
 package edu.jose.vazquez.actividades.actividad4.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Topic {
     private String name;
     private String id;
     private int credits;
     private int hours;
+    private Course course;
+    private List<Student> students;
+    private Teacher teacher;
 
     public Topic(String name, String id, int credits, int hours) {
         setName(name);
         setId(id);
         setCredits(credits);
         setHours(hours);
+        this.students = new ArrayList<>();
+        
+    }
+
+    public String toString() {
+        return "Topic: " + name + " ID: " + id + " Credits: " + credits + " Hours: " + hours;
     }
 
     public String getName() {
@@ -57,4 +69,27 @@ public class Topic {
         this.hours = hours;
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
 }

@@ -1,30 +1,53 @@
 package edu.jose.vazquez.actividades.actividad4.models;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Course {
     String name;
-    ArrayList<Topic> topics;
+    public List<Topic> topics;
+    public List<Teacher> teachers;
 
 
     public Course(String name, ArrayList<Topic> topics) {
         this.name = name;
-        this.topics = topics;
+        this.teachers = new ArrayList<>();    
+        this.topics = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public ArrayList<Topic> getTopics() {
+    public void setName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        this.name = name;
+    }
+
+    public List<Topic> getTopics() {
         return topics;
     }
 
+    public void addTopic(Topic topic) {
+        topics.add(topic);
+    }
+
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void addTeacher(Teacher teacher) {
+        teachers.add(teacher);
+    }
+
+
     public int getCredits() {
-        int creditosTotales = 0;
+        int creditsTotales = 0;
         for (Topic topic : topics) {
-            creditosTotales += topic.getCredits();
+            creditsTotales += topic.getCredits();
         }
-        return creditosTotales;
+        return creditsTotales;
     }
 
     public int getHours() {
@@ -34,4 +57,8 @@ public class Course {
         }
         return horasTotales;
     }
+
+    public String toString() {
+            return "Course: " + name + " Credits: " + getCredits() + " Hours: " + getHours() + " Topics: " + topics;
+        }
 }

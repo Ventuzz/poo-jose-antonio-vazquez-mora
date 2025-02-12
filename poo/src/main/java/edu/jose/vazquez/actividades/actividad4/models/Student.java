@@ -3,13 +3,11 @@ package edu.jose.vazquez.actividades.actividad4.models;
 public class Student {
     private String name;
     private int age;
-    private String enrollment;
     private String id;
 
-    public Student(String name, int age, String enrollment, String id) {
+    public Student(String name, int age, String id) {
         setName(name);
         setAge(age);
-        setEnrollment(enrollment);
         setId(id);
     }
 
@@ -35,16 +33,6 @@ public class Student {
         this.age = age;
     }
 
-    public String getEnrollment() {
-        return enrollment;
-    }
-
-    public void setEnrollment(String enrollment) {
-        if (enrollment == null) {
-            throw new IllegalArgumentException("Enrollment cannot be null");
-        }
-        this.enrollment = enrollment;
-    }
 
     public String getId() {
         return id;
@@ -57,4 +45,7 @@ public class Student {
         this.id = id;
     }
 
+    public String toString() {
+        return "Student: " + name + " Age: " + age + " ID: " + id;
+    }
 }
