@@ -1,6 +1,7 @@
 package edu.jose.vazquez.actividades.actividad4.ui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -9,6 +10,7 @@ import edu.jose.vazquez.actividades.actividad4.lang.Esp;
 import edu.jose.vazquez.actividades.actividad4.lang.Lang;
 import edu.jose.vazquez.actividades.actividad4.models.Course;
 import edu.jose.vazquez.actividades.actividad4.models.Student;
+import edu.jose.vazquez.actividades.actividad4.models.Subject;
 import edu.jose.vazquez.actividades.actividad4.models.Teacher;
 import edu.jose.vazquez.actividades.actividad4.process.SchoolManager;
 
@@ -154,18 +156,8 @@ public class CLI {
                             System.out.println(lang.invalid_input_not_number);
                         }
                     }
-                    System.out.println(lang.student_enrollment_headliner);
-                    String studentEnrollment;
-                    while (true) {
-                        System.out.print(lang.student_enrollment);
-                        studentEnrollment = scanner.nextLine().trim();
-                        if (studentEnrollment.isEmpty()) {
-                            System.out.println(lang.invalid_input_empty);
-                        } else {
-                            break;
-                        }
-                    }
-                    schoolManager.addStudent(studentName, studentAge, studentEnrollment, studentId);
+                    Student student = new Student(studentName, studentAge, studentId);
+                    schoolManager.enrollStudent(student);
                     System.out.println(lang.student_added);
                     break;
 
@@ -192,18 +184,62 @@ public class CLI {
                             break;
                         }
                     }
-                    System.out.println(lang.teacher_salary_headliner);
-                    double teacherSalary;
+                    Teacher teacher = new Teacher(teacherName, teacherPayroll);
+                    schoolManager.enrollTeacher(teacher);
+                    System.out.println(lang.teacher_added);
+                    break;
+
+                case 3:
+                    System.out.println(lang.course_name_headliner);
+                    String courseName;
                     while (true) {
-                        System.out.print(lang.teacher_salary);
+                        System.out.print(lang.course_name);
+                        courseName = scanner.nextLine().trim();
+                        if (courseName.isEmpty()) {
+                            System.out.println(lang.invalid_input_empty);
+                        } else {
+                            break;
+                        }
+                    }
+                    Course course = new Course(courseName, new ArrayList<>());
+                    schoolManager.enrollCourse(course);
+                    System.out.println(lang.course_added);
+                    break;
+                case 4:   //crear una materia
+                    System.out.println(lang.course_topic_name_headliner);
+                    String topicName;
+                    while (true) {
+                        System.out.print(lang.course_topic_name);
+                        topicName = scanner.nextLine().trim();
+                        if (topicName.isEmpty()) {
+                            System.out.println(lang.invalid_input_empty);
+                        } else {
+                            break;
+                        }
+                    }
+                    System.out.println(lang.course_topic_id_headliner);
+                    String topicId;
+                    while (true) {
+                        System.out.print(lang.course_topic_id);
+                        topicId = scanner.nextLine().trim();
+                        if (topicId.isEmpty()) {
+                            System.out.println(lang.invalid_input_empty);
+                        } else {
+                            break;
+                        }
+                    }
+                    System.out.println(lang.course_topic_credits_headliner);
+                    int topicCredits;
+                    while (true) {
+                        System.out.print(lang.course_topic_credits);
                         String input = scanner.nextLine().trim();
                         if (input.isEmpty()) {
                             System.out.println(lang.invalid_input_empty);
                             continue;
                         }
                         try {
-                            teacherSalary = Double.parseDouble(input);
-                            if (teacherSalary < 1) {
+                            topicCredits = Integer.parseInt(input);
+                            if (topicCredits < 1) {
                                 System.out.println(lang.invalid_input_negative_number);
                                 continue;
                             } else {
@@ -213,34 +249,70 @@ public class CLI {
                             System.out.println(lang.invalid_input_not_number);
                         }
                     }
-                    System.out.println(lang.teacher_subject_headliner);
-                    String teacherSubject;
+                    System.out.println(lang.course_topic_hours_headliner);
+                    int topicHours;
                     while (true) {
-                        System.out.print(lang.teacher_subject);
-                        teacherSubject = scanner.nextLine().trim();
-                        if (teacherSubject.isEmpty()) {
+                        System.out.print(lang.course_topic_hours);
+                        String input = scanner.nextLine().trim();
+                        if (input.isEmpty()) {
                             System.out.println(lang.invalid_input_empty);
-                        } else {
-                            break;
+                            continue;
+                        }
+                        try {
+                            topicHours = Integer.parseInt(input);
+                            if (topicHours < 1) {
+                                System.out.println(lang.invalid_input_negative_number);
+                                continue;
+                            } else {
+                                break;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(lang.invalid_input_not_number);
                         }
                     }
-                    schoolManager.addTeacher(teacherName, teacherPayroll, teacherSalary, teacherSubject);
-                    System.out.println(lang.teacher_added);
+                    Subject subject = new Subject(topicName, topicId, topicCredits, topicHours);
+                    schoolManager.enrollSubject(subject);             
                     break;
+                case 5: //añadir estudiante a curso
+                    System.out.println("selecciona el estudiante al que quieres inscribir");
 
-                case 3:
-                    makeCourse();
+                    
+
                     break;
-                case 4:
-                    schoolManager.getTeachers().forEach(teacher -> show_teachers(teacher));                 
+                case 6: //asignar materia a un curso
+                    
                     break;
-                case 5:
-                    schoolManager.getStudents().forEach(student -> show_students(student));
+                case 7: //Mostrar estudiantes en un curso
+                    
                     break;
-                case 6:
-                    schoolManager.getCourses().forEach(course -> show_courses(course));
+                case 8: //Mostrar profesores en un curso
+                    
                     break;
-                case 7:
+                case 9: //Mostrar materias que imparte un profesor
+                    
+                    break;
+                case 10: //Mostrar materias en un curso
+
+                    break;
+                case 11: //registro curso
+
+                    break;
+                case 12: //registro alumnos
+                
+                    break;
+                case 13: //registro profesores
+                    
+                    break;
+                case 14: //registro materias
+                    
+                    break;
+                case 15: //calcular salario de un profesor
+                    
+                    break;
+                case 16: //calcular horarios y creditos del curso
+                    
+                    break;
+                case 17: //salir
                     System.out.println(lang.goodbye);
                     break;
             }
@@ -248,89 +320,7 @@ public class CLI {
     }
 
     
-    public static void makeCourse(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(lang.course_name_headliner);
-        String courseName;
-        while (true) {
-            System.out.print(lang.course_name);
-            courseName = scanner.nextLine().trim();
-            if (courseName.isEmpty()) {
-                System.out.println(lang.invalid_input_empty);
-            } else {
-                break;
-            }
-        }
-        for (int i= 1; i<=3; i++){
-            System.out.println(lang.course_topic_name_headliner);
-            String topicName;
-            while (true) {
-                System.out.print(lang.course_topic_name);
-                topicName = scanner.nextLine().trim();
-                if (topicName.isEmpty()) {
-                    System.out.println(lang.invalid_input_empty);
-                } else {
-                    break;
-                }
-            }
-            System.out.println(lang.course_topic_id_headliner);
-            String topicId;
-            while (true) {
-                System.out.print(lang.course_topic_id);
-                topicId = scanner.nextLine().trim();
-                if (topicId.isEmpty()) {
-                    System.out.println(lang.invalid_input_empty);
-                } else {
-                    break;
-                }
-            }
-            System.out.println(lang.course_topic_credits_headliner);
-            int topicCredits;
-            while (true) {
-                System.out.print(lang.course_topic_credits);
-                String input = scanner.nextLine().trim();
-                if (input.isEmpty()) {
-                    System.out.println(lang.invalid_input_empty);
-                    continue;
-                }
-                try {
-                    topicCredits = Integer.parseInt(input);
-                    if (topicCredits < 1) {
-                        System.out.println(lang.invalid_input_negative_number);
-                        continue;
-                    } else {
-                        break;
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println(lang.invalid_input_not_number);
-                }
-            }
-            System.out.println(lang.course_topic_hours_headliner);
-            int topicHours;
-            while (true) {
-                System.out.print(lang.course_topic_hours);
-                String input = scanner.nextLine().trim();
-                if (input.isEmpty()) {
-                    System.out.println(lang.invalid_input_empty);
-                    continue;
-                }
-                try {
-                    topicHours = Integer.parseInt(input);
-                    if (topicHours < 1) {
-                        System.out.println(lang.invalid_input_negative_number);
-                        continue;
-                    } else {
-                        break;
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println(lang.invalid_input_not_number);
-                }
-            }
-            schoolManager.addTopic(courseName, topicId, topicCredits, topicHours);
-        }
-        schoolManager.addCourse(courseName, schoolManager.getTopics());
-        System.out.println(lang.course_added);
-    }
+    
     public static void showMenu(){
         System.out.println(lang.showMenu);
     }
@@ -353,7 +343,7 @@ public class CLI {
     public static void show_courses(Course course){
         System.out.println(lang.show_courses_menu);
         System.out.println(lang.show_courses_menu_name + course.getName());
-        System.out.println(lang.show_courses_menu_topics + course.getTopics());
+        System.out.println(lang.show_courses_menu_topics + course.getSubjects());
         System.out.println(lang.show_courses_menu_credits + course.getCredits());
         System.out.println(lang.show_courses_menu_hours + course.getHours());
         System.out.println(lang.show_courses_menu_bottom);

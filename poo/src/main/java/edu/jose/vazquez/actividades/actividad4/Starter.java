@@ -2,7 +2,7 @@ package edu.jose.vazquez.actividades.actividad4;
 import edu.jose.vazquez.actividades.actividad4.models.Course;
 import edu.jose.vazquez.actividades.actividad4.models.Student;
 import edu.jose.vazquez.actividades.actividad4.models.Teacher;
-import edu.jose.vazquez.actividades.actividad4.models.Topic;
+import edu.jose.vazquez.actividades.actividad4.models.Subject;
 import edu.jose.vazquez.actividades.actividad4.process.SchoolManager;
 import edu.jose.vazquez.actividades.actividad4.ui.CLI;
 
@@ -19,41 +19,41 @@ public class Starter {
         Student student5 = new Student("Ana", 24, "151617");
         Student student6 = new Student("Luis", 25, "181920");
 
-        Topic  topic1 = new Topic("Matematicas", "1", 4, 80);
-        Topic  topic2 = new Topic("fundamentos", "2", 5, 80);
-        Topic  topic3 = new Topic("POO", "3", 6, 80);
-        Topic  topic4 = new Topic("Estructura", "4", 7, 80);
+        Subject  topic1 = new Subject("Matematicas", "1", 4, 80);
+        Subject  topic2 = new Subject("fundamentos", "2", 5, 80);
+        Subject  topic3 = new Subject("POO", "3", 6, 80);
+        Subject  topic4 = new Subject("Estructura", "4", 7, 80);
+        Subject topic5 = new Subject("Base de datos", "5", 8, 80);
+        Subject topic6 = new Subject("Redes", "6", 9, 80);
 
-        Teacher teacher1 = new Teacher("Marco", 250.0, "Al086731");
-        Teacher teacher2 = new Teacher("Pedro", 300.0, "Al086732");
-        Teacher teacher3 = new Teacher("Maria", 350.0, "Al086733");
-        Teacher teacher4 = new Teacher("Ana", 400.0, "Al086734");
+        Teacher teacher1 = new Teacher("Marco",  "Al086731");
+        Teacher teacher2 = new Teacher("Pedro",  "Al086732");
+        Teacher teacher3 = new Teacher("Maria",  "Al086733");
+        Teacher teacher4 = new Teacher("Ana",  "Al086734");
 
         Course course1 = new Course("programacion", null);
         Course course2 = new Course("Fundamentos", null);
 
-            //schoolManager.enrollCourse(course1);
-            //schoolManager.enrollTopic(topic1);
-            //schoolManager.enrollTopic(topic2);
-            //schoolManager.enrollStudent(student1);
-            //schoolManager.enrollStudent(student2);
             cleanScreen();
-            //schoolManager.enrollTopicToCourse(topic1, course1);
-            //schoolManager.enrollTopicToCourse(topic2, course1);
-            //schoolManager.assignStudent(course1, student1);
-            //schoolManager.assignStudent(course1, student2);
-            //schoolManager.assignProfessor(course1, teacher1);
-            //schoolManager.enrollProfessor(teacher1);
-            //schoolManager.showStudentsInCourse(course1);
-            //schoolManager.showCourses();
-            //schoolManager.calculateHours(course1);
-            //schoolManager.assignSubject(topic1, teacher1);
-            //schoolManager.calculateSalary(teacher1);
 
-            schoolManager.enrollCourse(course1);
-            schoolManager.enrollCourse(course2);
-            schoolManager.assignProfessor(course2, teacher1);
-            schoolManager.showCourses();
+            schoolManager.enrollTeacher(teacher1);
+            schoolManager.enrollTeacher(teacher2);
+
+
+            schoolManager.assignSubjectToCourse(topic1, course2);
+            schoolManager.assignSubjectToTeacher(topic2, teacher1);
+            schoolManager.assignSubjectToTeacher(topic3, teacher1);
+            schoolManager.assignSubjectToTeacher(topic4, teacher1);
+            schoolManager.assignSubjectToCourse(topic6, course2);
+            schoolManager.assignSubjectToCourse(topic5, course2);
+
+            schoolManager.calculateSalary(teacher1);
+            schoolManager.calculateSalary(teacher2);
+
+            schoolManager.showSubjectsInCourse(course2);
+            
+
+            schoolManager.showTeachersInCourse(course2);
         }
     
         public static void cleanScreen() {

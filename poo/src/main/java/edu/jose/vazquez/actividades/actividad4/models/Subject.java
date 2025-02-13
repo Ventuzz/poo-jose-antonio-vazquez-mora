@@ -3,7 +3,7 @@ package edu.jose.vazquez.actividades.actividad4.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Topic {
+public class Subject {
     private String name;
     private String id;
     private int credits;
@@ -12,13 +12,12 @@ public class Topic {
     private List<Student> students;
     private Teacher teacher;
 
-    public Topic(String name, String id, int credits, int hours) {
+    public Subject(String name, String id, int credits, int hours) {
         setName(name);
         setId(id);
         setCredits(credits);
         setHours(hours);
         this.students = new ArrayList<>();
-        
     }
 
     public String toString() {
@@ -90,6 +89,9 @@ public class Topic {
     }
 
     public void setTeacher(Teacher teacher) {
+        if (teacher == null) {
+            throw new IllegalArgumentException("El profesor no puede ser nulo.");
+        }
         this.teacher = teacher;
     }
 }
