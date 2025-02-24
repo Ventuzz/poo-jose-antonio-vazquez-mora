@@ -8,7 +8,7 @@ public class CLI {
     public static void runApp() {
         Scanner scanner = new Scanner(System.in);
         int opcion = -1;
-        while (opcion != 9) {
+        while (opcion != 11) {
             showMenu();
             opcion = validation(scanner);
             switch (opcion) {
@@ -59,7 +59,7 @@ public class CLI {
                     System.out.println("El logaritmo de los números es: " + new Logaritmo().apply(i, j));
                     break;
                 case 7:
-                    System.out.println("Ingrese el número para calcular el módulo:");
+                    System.out.println("Ingrese el dividendo:");
                     int k = scanner.nextInt();
                     System.out.println("Ingrese el divisor:");
                     int l = scanner.nextInt();
@@ -67,7 +67,7 @@ public class CLI {
                         System.out.println("No se puede dividir entre 0");
                         break;
                     }
-                    System.out.println("El módulo de los números es: " + new Modulo().apply(k, l));
+                    System.out.println("El módulo de la división de esos números es: " + new Modulo().apply(k, l));
                     break;
                 case 8:
                     System.out.println("Ingrese el número para calcular el módulo del logaritmo:");
@@ -81,7 +81,22 @@ public class CLI {
                     System.out.println("El módulo del logaritmo de los números es: " + new ModLog().apply(m, n));
                     break;
                 case 9:
+                    System.out.println("Ingrese el número para calcular la raíz:");
+                    int o = scanner.nextInt();
+                    System.out.println("Ingrese el índice de la raíz:");
+                    int p = scanner.nextInt();
+                    System.out.println("La raíz más aproximada al número que solicitaste es: " + new Raiz().apply(o, p));
+                    break;
+                case 10:
+                    System.out.println("Ingrese el número para calcular el módulo de la raíz:");
+                    int q = scanner.nextInt();
+                    System.out.println("Ingrese el índice de la raíz:");
+                    int r = scanner.nextInt();
+                    System.out.println("El módulo de la raíz de los números es: " + new ModRaiz().apply(q, r));
+                    break;
+                case 11:
                     System.out.println("Saliendo...");
+                    System.exit(0   );
                     break;
             }
             scanner.nextLine();
@@ -96,9 +111,11 @@ public class CLI {
         System.out.println("4. calcular división de dos números");
         System.out.println("5. calcular potencia de un número");
         System.out.println("6. calcular logaritmo de un número");
-        System.out.println("7. calcular módulo de un número");
+        System.out.println("7. calcular módulo de una división");
         System.out.println("8. calcular modulo de un logaritmo");
-        System.out.println("9. salir");
+        System.out.println("9. calcular raiz de un número");
+        System.out.println("10. calcular modulo de una raiz");
+        System.out.println("11. salir");
     }
 
     public static int validation(Scanner scanner) {
@@ -111,7 +128,7 @@ public class CLI {
             }
             try {
                 opcion = Integer.parseInt(input);
-                if (opcion >= 1 && opcion <= 9) {
+                if (opcion >= 1 && opcion <= 11) {
                     return opcion; 
                 } else {
                     System.out.println("Ingrese una opción válida dentro del menú.");
