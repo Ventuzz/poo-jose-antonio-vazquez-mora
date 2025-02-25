@@ -6,7 +6,7 @@ public class Multiplicacion extends Suma {
     public int apply(int a, int b) {
         int result = 0;
         for (int i = 0; i < b; i++) {
-            result += a;
+            result = super.apply(result, a);
         }
         return result;
     }
