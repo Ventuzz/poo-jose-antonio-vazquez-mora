@@ -166,6 +166,10 @@ public class Bibliotecario {
             if (prestamo.getUsername().equals(username) && prestamo.getTitle().equals(isbn) && prestamo.getStatus().equals("Prestado")) {
                 prestamo.setStatus("Devuelto");
                 books.get(isbn).setAvailable(true);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendar = Calendar.getInstance();
+                Date currentDate = calendar.getTime();
+                prestamo.setFechaDevolucion(dateFormat.format(currentDate));
                 System.out.println("Libro devuelto con éxito.");
                 return;
             }
@@ -173,19 +177,51 @@ public class Bibliotecario {
         System.out.println("Error: No tienes este libro prestado.");
     }
 
-    public void mostrarPrestamosAdministrador(){
-        System.out.println("Préstamos activos:");
+    public void mostrarPrestamosAdministrador() {
+        System.out.println("Préstamos del mes:");
         boolean tienePrestamos = false;
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
         for (Prestamos prestamo : prestamos) {
             String isbn = prestamo.getTitle();
             String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
+            String fechaDevolucion = prestamo.getFechaFin();
+            
+            if (prestamo.getStatus().equals("Devuelto")) {
+                fechaDevolucion = prestamo.getFechaDevolucion(); 
+            }
+            
             System.out.println("\n Libro: " + nombreLibro +
                                "\n | ISBN: " + isbn +
                                "\n | Usuario: " + prestamo.getUsername() +
                                "\n | Fecha de préstamo: " + prestamo.getFechaInicio() +
-                               "\n | Fecha de devolución: " + prestamo.getFechaFin());
+                               "\n | Fecha de devolución: " + fechaDevolucion);
             tienePrestamos = true;
         }
+        
+        if (!tienePrestamos) {
+            System.out.println("No hay se han registrado prestamos en la biblioteca este mes.");
+        }
+    }
+
+    public void mostrarPrestamosActivosAdministrador() {
+        System.out.println("Préstamos activos:");
+        boolean tienePrestamos = false;
+    
+        for (Prestamos prestamo : prestamos) {
+            if (!prestamo.getStatus().equals("Devuelto")) { // Filtrar solo los préstamos activos
+                String isbn = prestamo.getTitle();
+                String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
+                System.out.println("\n Libro: " + nombreLibro +
+                                   "\n | ISBN: " + isbn +
+                                   "\n | Usuario: " + prestamo.getUsername() +
+                                   "\n | Fecha de préstamo: " + prestamo.getFechaInicio() +
+                                   "\n | Fecha de devolución: " + prestamo.getFechaFin());
+                tienePrestamos = true;
+            }
+        }
+    
         if (!tienePrestamos) {
             System.out.println("No hay préstamos activos en la biblioteca.");
         }

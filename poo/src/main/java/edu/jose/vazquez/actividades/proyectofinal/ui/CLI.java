@@ -349,14 +349,14 @@ public class CLI {
         public static void adminMenu(){
                 Scanner scanner = new Scanner(System.in);
                 int option = -1;
-                while (option != 5) {
+                while (option != 6) {
                     System.out.println(lang.menu_admin);
                     System.out.print(lang.select_an_option);
                     String userInput = scanner.nextLine().trim();
         
                     try {
                         option = Integer.parseInt(userInput);
-                        if (option < 1 || option > 5) {
+                        if (option < 1 || option > 6) {
                             System.out.println(lang.invalid_option);
                             continue;
                         }
@@ -469,13 +469,16 @@ public class CLI {
                         * @return void
                         */
                         case 4:
-                            bibliotecario.mostrarPrestamosAdministrador();
+                            bibliotecario.mostrarPrestamosActivosAdministrador();
                             break;
                         /**
                         * Opción para salir del menú de administrador
                         * @return void
                         */
-                        case 5:
+                        case 5: 
+                            bibliotecario.mostrarPrestamosAdministrador();
+                            break;
+                        case 6:
                             System.out.println(lang.exit_admin);
                             break;
                     }

@@ -7,6 +7,7 @@ public class Prestamos {
     private String fechaInicio;
     private String fechaFin;
     private String status;
+    private String fechaDevolucion;
     
     public Prestamos(String title, String username, String fechaInicio, String fechaFin, String status) {
         setTitle(title);
@@ -36,6 +37,10 @@ public class Prestamos {
         return status;
     }
 
+    public String getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -50,6 +55,10 @@ public class Prestamos {
 
     public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public void setFechaDevolucion(String fechaDevolucion) {
+        this.fechaDevolucion = fechaDevolucion;
     }
 
     public void setStatus(String status) {
