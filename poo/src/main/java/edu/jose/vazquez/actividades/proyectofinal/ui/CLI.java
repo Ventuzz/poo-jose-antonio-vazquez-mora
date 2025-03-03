@@ -55,6 +55,12 @@ public class CLI {
                 }
                 switch (opcion) {
                     case 1:
+                        try {
+                        new ProcessBuilder("cmd", "/c", "chcp 65001").inheritIO().start().waitFor();
+                        System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+                        } catch (IOException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         cleanScreen();
                         lang= new Esp();
                         break;
@@ -175,12 +181,16 @@ public class CLI {
                             System.out.println(lang.registration_success);
                             usernameLogged = user;
                             if (bibliotecario.getUsers().get(user).getTipo().equals("Usuario VIP")) {
+                                cleanScreen();
                                 userMenuVip();
                             } else if (bibliotecario.getUsers().get(user).getTipo().equals("Usuario JR")) {
+                                cleanScreen();
                                 userMenuJr();
                             } else if (bibliotecario.getUsers().get(user).getTipo().equals("Usuario teens")) {
+                                cleanScreen();
                                 userMenuTeens();
                             } else{
+                                cleanScreen();
                                 userMenu();
                             }
                             break;
@@ -222,12 +232,16 @@ public class CLI {
 
 
                                     if (bibliotecario.getUsers().get(registerUser).getTipo().equals("Usuario VIP")) {
+                                        cleanScreen();
                                         userMenuVip();
                                     } else if (bibliotecario.getUsers().get(registerUser).getTipo().equals("Usuario JR")) {
+                                        cleanScreen();
                                         userMenuJr();
                                     } else if (bibliotecario.getUsers().get(registerUser).getTipo().equals("Usuario teens")) {
+                                        cleanScreen();
                                         userMenuTeens();
                                     } else{
+                                        cleanScreen();
                                         userMenu();
                                     }
                                     
@@ -241,6 +255,7 @@ public class CLI {
                         * @return void
                         */
                         case 3:
+                        cleanScreen();
                         System.out.println(lang.goodbye);
                         break;
                 }
@@ -252,10 +267,11 @@ public class CLI {
         public static void cleanScreen(){
             try {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } catch (IOException | InterruptedException ex) {
-                System.out.println("Error al limpiar la consola.");
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
             }
         }
+
         /**
         * Método que se encarga de mostrar la información de un libro  
         * @param book
@@ -349,14 +365,14 @@ public class CLI {
         public static void adminMenu(){
                 Scanner scanner = new Scanner(System.in);
                 int option = -1;
-                while (option != 6) {
+                while (option != 13) {
                     System.out.println(lang.menu_admin);
                     System.out.print(lang.select_an_option);
                     String userInput = scanner.nextLine().trim();
         
                     try {
                         option = Integer.parseInt(userInput);
-                        if (option < 1 || option > 6) {
+                        if (option < 1 || option > 13) {
                             System.out.println(lang.invalid_option);
                             continue;
                         }
@@ -462,7 +478,8 @@ public class CLI {
                         */
                         case 3:
                             System.out.println(lang.show_books_in_catalog_message);
-                            bibliotecario.getBooks().forEach((k, v) -> showBook(v));
+                            //bibliotecario.getBooks().forEach((k, v) -> showBook(v));
+                            bibliotecario.showBooksSorted();
                             break;
                         /**
                         * Opción para mostrar los préstamos activos
@@ -479,8 +496,31 @@ public class CLI {
                             bibliotecario.mostrarPrestamosAdministrador();
                             break;
                         case 6:
-                            System.out.println(lang.exit_admin);
+                            bibliotecario.mostrarLibrosMasPopulares();
                             break;
+                        case 7:
+                            bibliotecario.mostrarLibrosMenosPopulares();
+                            break;
+                        case 8:
+                            bibliotecario.cambiarFechaTodosLosPrestamos(20);
+                            bibliotecario.añadirPrestamosVencidos();
+                            break;
+                        case 9:
+                            bibliotecario.mostrarPrestamosVencidos();
+                            break;
+                        case 10:
+                            bibliotecario.mostrarUsuariosVencidos();
+                            break;
+                        case 11:
+                            bibliotecario.mostrarUsuariosMasVencidos();
+                            break;
+                        case 12:
+                            bibliotecario.mostrarUsuariosMasEntregados();
+                            break;
+
+                        case 13:
+                            System.out.println(lang.exit_admin);
+                            break; 
                     }
                 }
         }

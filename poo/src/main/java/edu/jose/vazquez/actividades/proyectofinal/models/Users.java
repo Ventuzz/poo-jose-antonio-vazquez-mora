@@ -10,6 +10,8 @@ public class Users {
     private int age;
     private String name;
     private String tipo;
+    private int vencimientos;
+    private int entregados;
 
     public Users(String username, String password, int age, String name, String tipo) {
         setUsername(username);
@@ -17,6 +19,16 @@ public class Users {
         setAge(age); 
         setName(name);
         setTipo(tipo);
+        vencimientos=0;
+        entregados=0;
+    }
+
+    public int getVencimientos() {
+        return vencimientos;
+    }
+
+    public int getEntregados() {
+        return entregados;
     }
 
     public String getUsername() {
@@ -59,5 +71,13 @@ public class Users {
     public void setTipo(String tipo) {
         
         this.tipo = tipo;
+    }
+
+    public void setVencimientos(int vencimientos) {
+        this.vencimientos = vencimientos;
+    }
+
+    public void setEntregados(int entregados) {
+        this.entregados = entregados;
     }
 }
