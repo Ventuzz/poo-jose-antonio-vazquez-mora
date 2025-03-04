@@ -10,14 +10,14 @@ public class Book {
     private int popularity;
 
 
-    public Book(String title, String author, String isbn, boolean available, int year, String genre) {
+    public Book(String title, String author, String isbn, boolean available, int year, String genre, int popularity) {
         setTitle(title);
         setAuthor(author);
         setIsbn(isbn);
         setAvailable(available);
         setYear(year);
         setGenre(genre);
-        popularity=0;
+        setPopularity(popularity);
     }
 
     public boolean isAvailable(){

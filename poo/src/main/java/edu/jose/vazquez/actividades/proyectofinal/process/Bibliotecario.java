@@ -25,6 +25,7 @@ public class Bibliotecario {
     private ArrayList<Prestamos> prestamos;
     private static final String USERS_FILE = "src/main/java/edu/jose/vazquez/actividades/proyectofinal/data/usuarios.txt";
     private static final String BOOKS_FILE = "src/main/java/edu/jose/vazquez/actividades/proyectofinal/data/libros.txt";
+    private static final String PRESTAMOS_FILE = "src/main/java/edu/jose/vazquez/actividades/proyectofinal/data/prestamos.txt";
 
 
     public Bibliotecario() {
@@ -33,19 +34,102 @@ public class Bibliotecario {
         this.prestamos = new ArrayList<>();
         cargarUsuarios();
         cargarLibros();
+        cargarPrestamos();
         addUser("admin", "admin", 0, "admin");
         addUser("jose", "123", 25, "Jose Vazquez");
         addUser("juan", "123", 15, "Juan Perez");
         addUser("maria", "123", 10, "Maria Lopez");
         addUser ("pedro", "123", 0, "Pedro Martinez");
+        addUser("luis", "123", 18, "Luis Rodriguez");
+        addUser("ana", "123", 30, "Ana Garcia");
+        addUser("laura", "123", 0, "Laura Hernandez");
+        addUser("carlos", "123", 7, "Carlos Sanchez");
         addBook("Juego de tronos", "George R. Martin", "123", true, 1937, "Fantasia");
         addBook("El señor de los anillos", "J.R.R. Tolkien", "124", true, 1937, "Fantasia");
         addBook("Harry Potter", "J.K. Rowling", "125", true, 1937, "Fantasia");
         addBook("El principito", "Antoine de Saint-Exupéry", "126", true, 1937, "Fantasia");
         addBook("Cien años de soledad", "Gabriel García Márquez", "127", true, 1937, "Fantasia");
         addBook("Don Quijote de la Mancha", "Miguel de Cervantes", "128", true, 1937, "Fantasia");
+        addBook("El alquimista", "Paulo Coelho", "129", true, 1937, "Fantasia");
+        addBook("El código Da Vinci", "Dan Brown", "130", true, 1937, "Fantasia");
+        addBook("El perfume", "Patrick Süskind", "131", true, 1937, "Fantasia");
+        addBook("La sombra del viento", "Carlos Ruiz Zafón", "132", true, 1937, "Fantasia");
+        addBook("El nombre del viento", "Patrick Rothfuss", "133", true, 1937, "Fantasia");
+        addBook("La ladrona de libros", "Markus Zusak", "134", true, 1937, "Fantasia");
+        addPrestamo("123", "jose");
+        devolverLibro("123", "jose");
+        addPrestamo("123", "laura");
+        devolverLibro("123", "laura");
+        addPrestamo("123", "laura");
+        devolverLibro("123", "laura");
+        addPrestamo("126", "laura");
+        devolverLibro("126", "laura");
+        addPrestamo("126", "laura");
+        devolverLibro("126", "laura");
+        addPrestamo("130", "laura");
+        addPrestamo("124", "jose");
+        addPrestamo("131", "pedro");
+        addPrestamo("132", "pedro");
+        addPrestamo("129", "pedro");
+        devolverLibro("129", "pedro");
+        devolverLibro("131", "pedro");
+        addPrestamo("125","juan");
+        addPrestamo("134", "luis");
+        forzarVencimientoPrestamo("134", "luis");
+        addPrestamo("128", "ana");
+        forzarVencimientoPrestamo("128", "ana");
+        addPrestamo("134", "ana");
+        forzarVencimientoPrestamo("134", "ana");
+        
+
+
     }
 
+    public void actualizarPrestamos() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date currentDate = new Date();
+    
+        for (Prestamos prestamo : prestamos) {
+            if (prestamo.getStatus().equals("Prestado")) {
+                try {
+                    Date returnDate = dateFormat.parse(prestamo.getFechaFin());
+                    if (currentDate.after(returnDate)) {
+                        prestamo.setStatus("Vencido");
+                        users.get(prestamo.getUsername()).setVencimientos(users.get(prestamo.getUsername()).getVencimientos() + 1);
+                        books.get(prestamo.getTitle()).setAvailable(true);
+
+                    }
+                } catch (ParseException e) {
+                    System.out.println("Error al procesar la fecha de vencimiento: " + e.getMessage());
+                }
+            }
+        }
+        guardarPrestamos();
+        guardarUsuarios();
+    }
+
+    public void forzarVencimientoPrestamo(String isbn, String username) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -1); 
+        String fechaVencida = dateFormat.format(calendar.getTime());
+    
+        boolean encontrado = false;
+    
+        for (Prestamos prestamo : prestamos) {
+            if (prestamo.getUsername().equals(username) && prestamo.getTitle().equals(isbn) && prestamo.getStatus().equals("Prestado")) {
+                prestamo.setFechaFin(fechaVencida);
+                encontrado = true;
+                break;
+            }
+        }
+    
+        if (encontrado) {
+            guardarPrestamos(); 
+        } else {
+            System.out.println("No se encontró un préstamo activo para este libro y usuario.");
+        }
+    }
     public void mostrarPrestamosVencidos(){
         System.out.println("Préstamos vencidos:");
         boolean tienePrestamos = false;
@@ -75,29 +159,8 @@ public class Bibliotecario {
         }
     }
 
-    public void cambiarFechaTodosLosPrestamos(int diasRestar) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-    
-        for (Prestamos prestamo : prestamos) {
-            if (prestamo.getStatus().equals("Prestado")) { // Solo modificar préstamos activos
-                try {
-                    Date fechaDevolucion = dateFormat.parse(prestamo.getFechaFin());
-                    calendar.setTime(fechaDevolucion);
-                    calendar.add(Calendar.DAY_OF_MONTH, -diasRestar); // Restar días para que se venzan
-                    String nuevaFecha = dateFormat.format(calendar.getTime());
-                    prestamo.setFechaFin(nuevaFecha);
-                    System.out.println("Nueva fecha de devolución para " + prestamo.getUsername() + 
-                                       " con el libro " + prestamo.getTitle() + ": " + nuevaFecha);
-                } catch (ParseException e) {
-                    System.out.println("Error al modificar la fecha del préstamo: " + e.getMessage());
-                }
-            }
-        }
-    }
-    
 
-    public void añadirPrestamosVencidos(){
+    public void addPrestamoVencido(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
@@ -110,6 +173,7 @@ public class Bibliotecario {
                         books.get(isbn).setAvailable(true);
                         prestamo.setStatus("Vencido");
                         users.get(prestamo.getUsername()).setVencimientos(users.get(prestamo.getUsername()).getVencimientos() + 1);
+                        guardarPrestamos();
                     }
                 } catch (Exception e) {
                     System.out.println("Error al comparar fechas: " + e.getMessage());
@@ -117,6 +181,7 @@ public class Bibliotecario {
             }
         }
     }
+
 
 
     public void addUser(String username, String password, int age, String name) {
@@ -137,7 +202,7 @@ public class Bibliotecario {
             tipo = "Usuario adulto";
         }
 
-        Users newUser = new Users(username, password, age, name, tipo);
+        Users newUser = new Users(username, password, age, name, tipo, 0, 0);
         users.put(username, newUser);
         guardarUsuarios();
     }
@@ -187,7 +252,9 @@ public class Bibliotecario {
                 Prestamos newPrestamo = new Prestamos(isbn, username, dateFormat.format(currentDate), dateFormat.format(returnDate), "Prestado");
                 prestamos.add(newPrestamo);
                 books.get(isbn).setAvailable(false);
-                books.get(isbn).setPopularity(books.get(isbn).getPopularity() + 1); // Incrementar popularidad del libro
+                books.get(isbn).setPopularity(books.get(isbn).getPopularity() + 1);
+                guardarPrestamos();
+                guardarLibros(); 
                 return true;
             case "Usuario adulto":
                 SimpleDateFormat dateFormatAdult = new SimpleDateFormat("yyyy-MM-dd");
@@ -198,7 +265,9 @@ public class Bibliotecario {
                 Prestamos newPrestamoAdult = new Prestamos(isbn, username, dateFormatAdult.format(currentDateAdult), dateFormatAdult.format(returnDateAdult), "Prestado");
                 prestamos.add(newPrestamoAdult);
                 books.get(isbn).setAvailable(false);
-                books.get(isbn).setPopularity(books.get(isbn).getPopularity() + 1); // Incrementar popularidad del libro
+                books.get(isbn).setPopularity(books.get(isbn).getPopularity() + 1);
+                guardarPrestamos();
+                guardarLibros(); 
                 return true;
             case "Usuario VIP":
                 SimpleDateFormat dateFormatVip = new SimpleDateFormat("yyyy-MM-dd");
@@ -209,18 +278,50 @@ public class Bibliotecario {
                 Prestamos newPrestamoVip = new Prestamos(isbn, username, dateFormatVip.format(currentDateVip), dateFormatVip.format(returnDateVip   ), "Prestado");
                 prestamos.add(newPrestamoVip);
                 books.get(isbn).setAvailable(false);
-                books.get(isbn).setPopularity(books.get(isbn).getPopularity() + 1); // Incrementar popularidad del libro
+                books.get(isbn).setPopularity(books.get(isbn).getPopularity() + 1);
+                guardarPrestamos();
+                guardarLibros();
+                 
                 return true;
         }
         return false;
     }
-
-    private void guardarUsuarios() {
-        File file = new File(USERS_FILE);
+    private void guardarPrestamos(){
+        File file = new File(PRESTAMOS_FILE);
         file.getParentFile().mkdirs();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PRESTAMOS_FILE))) {
+            for (Prestamos prestamo : prestamos) {
+                writer.write(prestamo.getTitle() + "," + prestamo.getUsername() + "," + prestamo.getFechaInicio() + "," + prestamo.getFechaFin() + "," + prestamo.getStatus());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error al guardar prestamos: " + e.getMessage());
+        }
+    }
+
+    private void cargarPrestamos(){
+        File file = new File(PRESTAMOS_FILE);
+        if (!file.exists()) {
+            System.out.println("No se encontraron datos de prestamos.");
+            return;
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(PRESTAMOS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 5) {
+                    Prestamos prestamo = new Prestamos(parts[0], parts[1], parts[2], parts[3], parts[4]);
+                    prestamos.add(prestamo);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("No se encontraron datos de prestamos.");
+        }
+    }
+    private void guardarUsuarios() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE))) {
             for (Users user : users.values()) {
-                writer.write(user.getUsername() + "," + user.getPassword() + "," + user.getAge() + "," + user.getName() + "," + user.getTipo());
+                writer.write(user.getUsername() + "," + user.getPassword() + "," + user.getAge() + "," + user.getName() + "," + user.getTipo() + "," + user.getEntregados() + "," + user.getVencimientos());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -238,22 +339,20 @@ public class Bibliotecario {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 5) {
-                    Users user = new Users(parts[0], parts[1], Integer.parseInt(parts[2]), parts[3], parts[4]);
+                if (parts.length == 7) { // Ahora tiene 7 campos en lugar de 5
+                    Users user = new Users(parts[0], parts[1], Integer.parseInt(parts[2]), parts[3], parts[4], Integer.parseInt(parts[5]), Integer.parseInt(parts[6]));
                     users.put(parts[0], user);
                 }
             }
         } catch (IOException e) {
-            System.out.println("No se encontraron datos de usuarios.");
+            System.out.println("Error al cargar usuarios.");
         }
     }
 
     private void guardarLibros() {
-        File file = new File(BOOKS_FILE);
-        file.getParentFile().mkdirs();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(BOOKS_FILE))) {
             for (Book book : books.values()) {
-                writer.write(book.getTitle() + "," + book.getAuthor() + "," + book.getIsbn() + "," + book.isAvailable() + "," + book.getYear() + "," + book.getGenre());
+                writer.write(book.getTitle() + "," + book.getAuthor() + "," + book.getIsbn() + "," + book.isAvailable() + "," + book.getYear() + "," + book.getGenre() + "," + book.getPopularity());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -261,7 +360,7 @@ public class Bibliotecario {
         }
     }
 
-    private void cargarLibros() {
+    public void cargarLibros() {
         File file = new File(BOOKS_FILE);
         if (!file.exists()) {
             System.out.println("No se encontraron datos de libros.");
@@ -271,13 +370,13 @@ public class Bibliotecario {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 6) {
-                    Book book = new Book(parts[0], parts[1], parts[2], Boolean.parseBoolean(parts[3]), Integer.parseInt(parts[4]), parts[5]);
+                if (parts.length == 7) { // Ahora incluye la popularidad
+                    Book book = new Book(parts[0], parts[1], parts[2], Boolean.parseBoolean(parts[3]), Integer.parseInt(parts[4]), parts[5], Integer.parseInt(parts[6]));
                     books.put(parts[2], book);
                 }
             }
         } catch (IOException e) {
-            System.out.println("No se encontraron datos de libros.");
+            System.out.println("Error al cargar libros.");
         }
     }
     
@@ -324,31 +423,16 @@ public class Bibliotecario {
                 prestamo.setFechaDevolucion(dateFormat.format(currentDate));
                 users.get(username).setEntregados(users.get(username).getEntregados() + 1);
                 System.out.println("Libro devuelto con éxito.");
+                guardarPrestamos();
+                guardarUsuarios();
+                guardarLibros();
                 return;
             }
         }
         System.out.println("Error: No tienes este libro prestado.");
     }
 
-    public void mostrarLibrosMasPopulares() {
-        System.out.println("Libros más populares:");
-        List<Book> librosOrdenados = books.values().stream()
-                .filter(book -> book.getPopularity() > 0)
-                .sorted(Comparator.comparing(Book::getPopularity, Comparator.reverseOrder())
-                        .thenComparing(Book::getTitle))
-                .collect(Collectors.toList());
-        
-        if (librosOrdenados.isEmpty()) {
-            System.out.println("No hay libros populares en la biblioteca.");
-        } else {
-            for (Book book : librosOrdenados) {
-                System.out.println("\n Título: " + book.getTitle() +
-                                   "\n | Autor: " + book.getAuthor() +
-                                   "\n | ISBN: " + book.getIsbn() +
-                                   "\n | Popularidad: " + book.getPopularity());
-            }
-        }
-    }
+
 
     public void mostrarUsuariosVencidos(){
         System.out.println("Usuarios con préstamos vencidos:");
@@ -388,6 +472,7 @@ public class Bibliotecario {
                                    "\n | Préstamos vencidos: " + user.getVencimientos());
             }
         }
+
     }
 
     public void mostrarUsuariosMasEntregados(){
@@ -434,7 +519,31 @@ public class Bibliotecario {
             }
         }
     }
+    
+    public void mostrarLibrosMasPopulares() {
+        cargarLibros();
+        System.out.println("Libros más populares:");
+        List<Book> librosOrdenados = books.values().stream()
+                .filter(book -> book.getPopularity() > 0)
+                .sorted(Comparator.comparing(Book::getPopularity, Comparator.reverseOrder())
+                        .thenComparing(Book::getTitle))
+                .collect(Collectors.toList());
+        
+        if (librosOrdenados.isEmpty()) {
+            System.out.println("No hay libros populares en la biblioteca.");
+        } else {
+            for (Book book : librosOrdenados) {
+                System.out.println("\n Título: " + book.getTitle() +
+                                   "\n | Autor: " + book.getAuthor() +
+                                   "\n | ISBN: " + book.getIsbn() +
+                                   "\n | Popularidad: " + book.getPopularity());
+            }
+        }
+    }
+
+
     public void mostrarLibrosMenosPopulares() {
+        cargarLibros();
         System.out.println("Libros menos populares:");
         List<Book> librosOrdenados = books.values().stream()
                 .sorted(Comparator.comparing(Book::getPopularity)
@@ -453,8 +562,8 @@ public class Bibliotecario {
         }
     }
 
-
     public void mostrarPrestamosAdministrador() {
+        
         System.out.println("Préstamos del mes:");
         boolean tienePrestamos = false;
         for (Prestamos prestamo : prestamos) {
@@ -532,7 +641,7 @@ public class Bibliotecario {
             System.out.println("Error: El libro ya está registrado.");
             return;
         }
-        Book newBook = new Book(title, author, isbn, available, year, genre);
+        Book newBook = new Book(title, author, isbn, available, year, genre, 0);
         books.put(isbn, newBook);
         guardarLibros();
     }

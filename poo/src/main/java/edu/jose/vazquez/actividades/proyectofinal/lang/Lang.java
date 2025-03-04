@@ -6,6 +6,7 @@ public class Lang {
     public String menu_register;
     public String menu_exit;
     public String menu_admin;
+    public String menu_admin_advance;
     public String menu_user;
     public String menu_book_catalog;
     public String menu_borrow_book;

@@ -13,14 +13,15 @@ public class Users {
     private int vencimientos;
     private int entregados;
 
-    public Users(String username, String password, int age, String name, String tipo) {
+    public Users(String username, String password, int age, String name, String tipo, int entregados, int vencimientos) {
         setUsername(username);
         setPassword(password);
         setAge(age); 
         setName(name);
         setTipo(tipo);
-        vencimientos=0;
-        entregados=0;
+        setEntregados(entregados);
+        setVencimientos(vencimientos);
+        
     }
 
     public int getVencimientos() {

@@ -346,6 +346,10 @@ public class CLI {
             System.out.println("╚═══════════════════════════════════════╝");
         }
 
+        public static void showAdminMenuAdvance(){
+        System.out.println(lang.menu_admin_advance);
+        }
+
         public static void showAvailableBooks(){
             if (bibliotecario.getBooks().isEmpty()) {
                 System.out.println("No hay libros disponibles");
@@ -365,14 +369,14 @@ public class CLI {
         public static void adminMenu(){
                 Scanner scanner = new Scanner(System.in);
                 int option = -1;
-                while (option != 13) {
+                while (option != 5) {
                     System.out.println(lang.menu_admin);
                     System.out.print(lang.select_an_option);
                     String userInput = scanner.nextLine().trim();
         
                     try {
                         option = Integer.parseInt(userInput);
-                        if (option < 1 || option > 13) {
+                        if (option < 1 || option > 5) {
                             System.out.println(lang.invalid_option);
                             continue;
                         }
@@ -502,8 +506,8 @@ public class CLI {
                             bibliotecario.mostrarLibrosMenosPopulares();
                             break;
                         case 8:
-                            bibliotecario.cambiarFechaTodosLosPrestamos(20);
-                            bibliotecario.añadirPrestamosVencidos();
+                            bibliotecario.actualizarPrestamos();
+                            bibliotecario.addPrestamoVencido();
                             break;
                         case 9:
                             bibliotecario.mostrarPrestamosVencidos();
