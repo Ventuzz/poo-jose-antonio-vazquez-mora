@@ -9,7 +9,6 @@ import edu.jose.vazquez.actividades.proyectofinal.lang.Eng;
 import edu.jose.vazquez.actividades.proyectofinal.lang.Esp;
 import edu.jose.vazquez.actividades.proyectofinal.lang.Jap;
 import edu.jose.vazquez.actividades.proyectofinal.lang.Lang;
-import edu.jose.vazquez.actividades.proyectofinal.models.Book;
 import edu.jose.vazquez.actividades.proyectofinal.models.Users;
 import edu.jose.vazquez.actividades.proyectofinal.process.Bibliotecario;
 
@@ -89,6 +88,7 @@ public class CLI {
          */        
     
         public static void runApp() {
+                bibliotecario.setLang(lang);
                 Scanner scanner = new Scanner(System.in);
                 int opcion = -1; 
                 while (opcion !=3) {
@@ -150,29 +150,29 @@ public class CLI {
                                     break;
                                 }
                             }
-                            System.out.println("Ingrese su edad");
+                            System.out.println(lang.enter_age);
                             int age;
                             while (true) {
                                 try {
-                                    System.out.print("Edad: ");
+                                    System.out.print(lang.age);
                                     age = Integer.parseInt(scanner.nextLine());
                                     if (age < 0) {
-                                        throw new IllegalArgumentException("La edad no puede ser negativa");
+                                        throw new IllegalArgumentException(lang.age_negative);
                                     }
                                     break;
                                 } catch (NumberFormatException e) {
-                                    System.out.println("Ingrese un número válido");
+                                    System.out.println(lang.error_valid_number);
                                 } catch (IllegalArgumentException e) {
                                     System.out.println(e.getMessage());
                                 }
                             }
-                            System.out.println("Ingrese su nombre real");
+                            System.out.println(lang.error_real_name);
                             String name;
                             while (true) {
-                                System.out.print("Nombre: ");
+                                System.out.print(lang.name_with_colon);
                                 name = scanner.nextLine().trim();
                                 if (name.isEmpty()) {
-                                    System.out.println("Ingrese un nombre válido");
+                                    System.out.println(lang.error_valid_name);
                                 } else {
                                     break;
                                 }
@@ -279,13 +279,7 @@ public class CLI {
         * @return void
         */
         public static void showUser(Users user){
-            System.out.println("╔═══════════════════╗");
-            System.out.println("║ Usuario: " + user.getUsername() + "   ║");
-            System.out.println("║ Contraseña: " + user.getPassword() + "   ║");
-            System.out.println("║ Edad: " + user.getAge() + "   ║");
-            System.out.println("║ Nombre: " + user.getName() + "   ║");
-            System.out.println("║ Tipo de usuario: " + user.getTipo() + "   ║");
-            System.out.println("╚═══════════════════╝");
+            System.out.println("╔═══════════════════╗\n"+lang.user_showuser+user.getUsername()+"\n"+lang.password_showuser+user.getPassword()+"\n"+lang.edad_showuser+user.getAge()+"\n"+lang.name_showuser+user.getName()+"\n"+lang.user_type_showuser+user.getTipo()+"\n╚═══════════════════╝");
         }
     
         /**
@@ -297,36 +291,15 @@ public class CLI {
         }
 
         public static void showMenuJr(){
-            System.out.println("╔═══════════════════════════════╗");
-            System.out.println("║             Menú JR           ║");
-            System.out.println("╠═══════════════════════════════╣");
-            System.out.println("║ 1. Ver libros disponibles     ║");
-            System.out.println("║ 2. Salir                      ║");
-            System.out.println("╚═══════════════════════════════╝");
+            System.out.println(lang.jr_menu);
         }
 
         public static void showMenuTeens(){
-            System.out.println("╔═══════════════════════════════════════╗");
-            System.out.println("║               Menú Teens              ║");
-            System.out.println("╠═══════════════════════════════════════╣");
-            System.out.println("║ 1. Ver libros disponibles             ║");
-            System.out.println("║ 2. Solicitar préstamo de un libro     ║");
-            System.out.println("║ 3. Préstamos activos                  ║");
-            System.out.println("║ 4. Devolver un libro                  ║");
-            System.out.println("║ 5. Salir                              ║");
-            System.out.println("╚═══════════════════════════════════════╝");
+            System.out.println(lang.teens_menu);
         }
 
         public static void showMenuVip(){
-            System.out.println("╔═══════════════════════════════════════╗");
-            System.out.println("║               Menú VIP                ║");
-            System.out.println("╠═══════════════════════════════════════╣");
-            System.out.println("║ 1. Ver libros disponibles             ║");
-            System.out.println("║ 2. Solicitar préstamo de un libro     ║");
-            System.out.println("║ 3. Préstamos activos                  ║");
-            System.out.println("║ 4. Devolver un libro                  ║");
-            System.out.println("║ 5. Salir                              ║");
-            System.out.println("╚═══════════════════════════════════════╝");
+            System.out.println(lang.vip_menu);
         }
 
         public static void showAdminMenuAdvance(){
@@ -450,7 +423,7 @@ public class CLI {
                         case 2:
                             bibliotecario.actualizarPrestamos();
                             bibliotecario.addPrestamoVencido();
-                            System.out.println("Se han actualizado los préstamos");
+                            System.out.println(lang.update_loans);
                             break;
                         case 3:
                             bibliotecario.mostrarPrestamosActivosAdministrador();
@@ -575,14 +548,14 @@ public class CLI {
                             System.out.print(lang.isbn);
                             bookName = scanner.nextLine().trim();
                             if (bookName.isEmpty()) {
-                                System.out.println(lang.invalid_title);
+                                System.out.println(lang.invalid_isbn);
                             } else {
                                 break;
                             }
                         }
                         if (bibliotecario.addPrestamo(bookName, usernameLogged)) {
-                            System.out.println("Préstamo realizado con éxito ");
-                            System.out.println("El libro se ha prestado por 7 días por ser un adulto, recuerda devolverlo a tiempo");
+                            System.out.println(lang.borrowed_success);
+                            System.out.println(lang.adult_borrowed);
                         } 
                         break;
                     /**
@@ -597,14 +570,13 @@ public class CLI {
                     * @return void
                     */
                     case 4:
-                        System.out.println("Devolver libro");
-                        System.out.println("Ingrese el ISBN del libro que desea devolver");
+                        System.out.println(lang.enter_isbn);
                         String isbn;
                         while (true) {
-                            System.out.print("ISBN: ");
+                            System.out.print(lang.isbn);
                             isbn = scanner.nextLine().trim();
                             if (isbn.isEmpty()) {
-                                System.out.println("Ingrese un ISBN válido");
+                                System.out.println(lang.entered_invalid_isbn);
                             } else {
                                 break;
                             }
@@ -720,14 +692,14 @@ public class CLI {
                             System.out.print(lang.isbn);
                             bookName = scanner.nextLine().trim();
                             if (bookName.isEmpty()) {
-                                System.out.println(lang.invalid_title);
+                                System.out.println(lang.invalid_isbn);
                             } else {
                                 break;
                             }
                         }
                         if (bibliotecario.addPrestamo(bookName, usernameLogged)) {
-                            System.out.println("Préstamo realizado con éxito");
-                            System.out.println("El libro se ha prestado por 7 días por ser usuario teens, recuerda devolverlo a tiempo");
+                            System.out.println(lang.borrowed_success);
+                            System.out.println(lang.teen_borrowed);
                         } 
                         break;
                     /**
@@ -742,14 +714,13 @@ public class CLI {
                     * @return void
                     */
                     case 4:
-                        System.out.println("Devolver libro");
-                        System.out.println("Ingrese el ISBN del libro que desea devolver");
+                        System.out.println(lang.enter_isbn);
                         String isbn;
                         while (true) {
-                            System.out.print("ISBN: ");
+                            System.out.print(lang.isbn);
                             isbn = scanner.nextLine().trim();
                             if (isbn.isEmpty()) {
-                                System.out.println("Ingrese un ISBN válido");
+                                System.out.println(lang.entered_invalid_isbn);
                             } else {
                                 break;
                             }
@@ -815,14 +786,14 @@ public class CLI {
                             System.out.print(lang.isbn);
                             bookName = scanner.nextLine().trim();
                             if (bookName.isEmpty()) {
-                                System.out.println(lang.invalid_title);
+                                System.out.println(lang.invalid_isbn);
                             } else {
                                 break;
                             }
                         }
                         if (bibliotecario.addPrestamo(bookName, usernameLogged)) {
-                            System.out.println("Préstamo realizado con éxito");
-                            System.out.println("El libro se ha prestado por 14 días por ser usuario VIP, recuerda devolverlo a tiempo");
+                            System.out.println(lang.borrowed_success);
+                            System.out.println(lang.vip_borrowed);
                         } 
                         break;
                     /**
@@ -837,14 +808,13 @@ public class CLI {
                     * @return void
                     */
                     case 4:
-                        System.out.println("Devolver libro");
-                        System.out.println("Ingrese el ISBN del libro que desea devolver");
+                        System.out.println(lang.enter_isbn);
                         String isbn;
                         while (true) {
-                            System.out.print("ISBN: ");
+                            System.out.print(lang.isbn);
                             isbn = scanner.nextLine().trim();
                             if (isbn.isEmpty()) {
-                                System.out.println("Ingrese un ISBN válido");
+                                System.out.println(lang.entered_invalid_isbn);
                             } else {
                                 break;
                             }

@@ -17,9 +17,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import edu.jose.vazquez.actividades.proyectofinal.lang.Lang;
+import edu.jose.vazquez.actividades.proyectofinal.lang.Esp;
+import edu.jose.vazquez.actividades.proyectofinal.lang.Eng;
+import edu.jose.vazquez.actividades.proyectofinal.lang.Jap;
 import edu.jose.vazquez.actividades.proyectofinal.models.Prestamos;
 
 public class Bibliotecario {
+    private Lang lang=new Lang();
     private HashMap<String, Users> users;
     private HashMap<String, Book> books;
     private ArrayList<Prestamos> prestamos;
@@ -27,7 +32,9 @@ public class Bibliotecario {
     private static final String BOOKS_FILE = "src/main/java/edu/jose/vazquez/actividades/proyectofinal/data/libros.txt";
     private static final String PRESTAMOS_FILE = "src/main/java/edu/jose/vazquez/actividades/proyectofinal/data/prestamos.txt";
 
-
+    public void setLang(Lang lang){
+        this.lang=lang;
+    }
     public Bibliotecario() {
         this.users = new HashMap<>();
         this.books = new HashMap<>();
@@ -97,7 +104,7 @@ public class Bibliotecario {
 
                     }
                 } catch (ParseException e) {
-                    System.out.println("Error al procesar la fecha de vencimiento: " + e.getMessage());
+                    System.out.println(lang.error_modifing_date+ e.getMessage());
                 }
             }
         }
@@ -124,11 +131,11 @@ public class Bibliotecario {
         if (encontrado) {
             guardarPrestamos(); 
         } else {
-            System.out.println("No se encontró un préstamo activo para este libro y usuario.");
+            System.out.println(lang.user_and_book_not_found);
         }
     }
     public void mostrarPrestamosVencidos(){
-        System.out.println("Préstamos vencidos:");
+        System.out.println(lang.overdue_loans);
         boolean tienePrestamos = false;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
@@ -140,19 +147,19 @@ public class Bibliotecario {
                     if (currentDate.after(returnDate)) {
                         String isbn = prestamo.getTitle();
                         String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
-                        System.out.println("\n Libro: " + nombreLibro +
-                                           "\n | ISBN: " + isbn +
-                                           "\n | Usuario: " + prestamo.getUsername() +
-                                           "\n | Fecha de devolución: " + prestamo.getFechaFin());
+                        System.out.println("\n"+ lang.book_alone + nombreLibro +
+                                           "\n"+ lang.isbn_overdue_loans + isbn +
+                                           "\n"+ lang.user_overdue_loans + prestamo.getUsername() +
+                                           "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin());
                         tienePrestamos = true;
                     }
                 } catch (Exception e) {
-                    System.out.println("Error al comparar fechas: " + e.getMessage());
+                    System.out.println(lang.error_comparing_dates + e.getMessage());
                 }
             }
         }
         if (!tienePrestamos) {
-            System.out.println("No hay préstamos vencidos en la biblioteca.");
+            System.out.println(lang.no_overdue_loans);
         }
     }
 
@@ -173,7 +180,7 @@ public class Bibliotecario {
                         guardarPrestamos();
                     }
                 } catch (Exception e) {
-                    System.out.println("Error al comparar fechas: " + e.getMessage());
+                    System.out.println(lang.error_comparing_dates + e.getMessage());
                 }
             }
         }
@@ -183,7 +190,7 @@ public class Bibliotecario {
 
     public void addUser(String username, String password, int age, String name) {
         if (users.containsKey(username)) {
-            System.out.println("Error: El usuario ya existe.");
+            System.out.println(lang.error_already_exists);
             return;
         }
 
@@ -206,15 +213,15 @@ public class Bibliotecario {
 
     public Boolean addPrestamo(String isbn, String username) {
         if (!users.containsKey(username)) {
-            System.out.println("Error: Usuario no encontrado.");
+            System.out.println(lang.user_not_found);
             return false;
         }
         if (!books.containsKey(isbn)) {
-            System.out.println("Error: Libro no encontrado.");
+            System.out.println(lang.book_not_found);
             return false;
         }
         if (!books.get(isbn).isAvailable()) {
-            System.out.println("Error: Libro no disponible.");
+            System.out.println(lang.book_not_available);
             return false;
         }
         Users user = users.get(username);
@@ -222,19 +229,19 @@ public class Bibliotecario {
         switch (user.getTipo()) {
             case "Usuario teens":
                 if (prestamosActuales >= 1) {
-                    System.out.println("Solo puedes tener 1 libro prestado a la vez, por favor devuelvelo antes de pedir otro.");
+                    System.out.println(lang.overload_teens);
                     return false;
                 }
                 break;
             case "Usuario adulto":
                 if (prestamosActuales >= 2) {
-                    System.out.println("Solo puedes tener 2 libros prestados a la vez, por favor devuelve uno antes de pedir otro.");
+                    System.out.println(lang.overload_adult);
                     return false;
                 }
                 break;
             case "Usuario VIP":
                 if (prestamosActuales >= 5){
-                    System.out.println("Solo puedes tener 5 libros prestados a la vez, por favor devuelve uno antes de pedir otro.");
+                    System.out.println(lang.overload_vip);
                     return false;
                 } 
                 break;
@@ -293,14 +300,14 @@ public class Bibliotecario {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error al guardar prestamos: " + e.getMessage());
+            System.out.println(lang.error_saving_loans + e.getMessage());
         }
     }
 
     private void cargarPrestamos(){
         File file = new File(PRESTAMOS_FILE);
         if (!file.exists()) {
-            System.out.println("No se encontraron datos de prestamos.");
+            System.out.println(lang.loans_data_not_found);
             return;
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(PRESTAMOS_FILE))) {
@@ -313,7 +320,7 @@ public class Bibliotecario {
                 }
             }
         } catch (IOException e) {
-            System.out.println("No se encontraron datos de prestamos.");
+            System.out.println(lang.loans_data_not_found);
         }
     }
     private void guardarUsuarios() {
@@ -323,14 +330,14 @@ public class Bibliotecario {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error al guardar usuarios: " + e.getMessage());
+            System.out.println(lang.error_saving_user + e.getMessage());
         }
     }
 
     private void cargarUsuarios() {
         File file = new File(USERS_FILE);
         if (!file.exists()) {
-            System.out.println("No se encontraron datos de usuarios.");
+            System.out.println(lang.user_data_not_found);
             return;
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE))) {
@@ -343,7 +350,7 @@ public class Bibliotecario {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error al cargar usuarios.");
+            System.out.println(lang.error_loading_user);
         }
     }
 
@@ -354,14 +361,14 @@ public class Bibliotecario {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error al guardar libros: " + e.getMessage());
+            System.out.println(lang.error_saving_books + e.getMessage());
         }
     }
 
     public void cargarLibros() {
         File file = new File(BOOKS_FILE);
         if (!file.exists()) {
-            System.out.println("No se encontraron datos de libros.");
+            System.out.println(lang.book_data_not_found);
             return;
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(BOOKS_FILE))) {
@@ -374,7 +381,7 @@ public class Bibliotecario {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error al cargar libros.");
+            System.out.println(lang.error_loading_books);
         }
     }
     
@@ -391,7 +398,7 @@ public class Bibliotecario {
     public String validarUsuario(String username) {
         Users user = users.get(username);
         if (user == null) {
-            System.out.println("Error: Usuario no encontrado.");
+            System.out.println(lang.user_not_found );
             return "Desconocido";
         }
 
@@ -404,11 +411,11 @@ public class Bibliotecario {
 
     public void devolverLibro(String isbn, String username) {
         if (!users.containsKey(username)) {
-            System.out.println("Error: Usuario no encontrado.");
+            System.out.println(lang.user_not_found);
             return;
         }
         if (!books.containsKey(isbn)) {
-            System.out.println("Error: Libro no encontrado.");
+            System.out.println(lang.book_not_found);
             return;
         }
         for (Prestamos prestamo : prestamos) {
@@ -420,39 +427,39 @@ public class Bibliotecario {
                 Date currentDate = calendar.getTime();
                 prestamo.setFechaDevolucion(dateFormat.format(currentDate));
                 users.get(username).setEntregados(users.get(username).getEntregados() + 1);
-                System.out.println("Libro devuelto con éxito.");
+                System.out.println(lang.succesfuly_returned);
                 guardarPrestamos();
                 guardarUsuarios();
                 guardarLibros();
                 return;
             }
         }
-        System.out.println("Error: No tienes este libro prestado.");
+        System.out.println(lang.book_not_borrowed);
     }
 
 
 
     public void mostrarUsuariosVencidos(){
-        System.out.println("Usuarios con préstamos vencidos:");
+        System.out.println(lang.users_with_overdue);
         boolean tienePrestamos = false;
         for (Prestamos prestamo : prestamos) {
             if (prestamo.getStatus().equals("Vencido")) {
                 String isbn = prestamo.getTitle();
                 String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
-                System.out.println("\n Usuario: " + prestamo.getUsername() +
-                                   "\n | Libro: " + nombreLibro +
-                                   "\n | ISBN: " + isbn +
-                                   "\n | Fecha de devolución: " + prestamo.getFechaFin());
+                System.out.println("\n"+ lang.user_more_returned   + prestamo.getUsername() +
+                                   "\n"+ lang.book_more_overdue  + nombreLibro +
+                                   "\n"+lang.isbn_overdue_loans  + isbn +
+                                   "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin());
                 tienePrestamos = true;
             }
         }
         if (!tienePrestamos) {
-            System.out.println("No hay usuarios con préstamos vencidos.");
+            System.out.println(lang.no_users_with_overdue);
         }
     }
 
     public void mostrarUsuariosMasVencidos(){
-        System.out.println("Usuarios con más préstamos vencidos:");
+        System.out.println(lang.users_with_more_overdue);
         List<Users> usuariosOrdenados = users.values().stream()
                 .filter(user -> user.getVencimientos() > 0)
                 .sorted(Comparator.comparing(Users::getVencimientos, Comparator.reverseOrder())
@@ -460,20 +467,20 @@ public class Bibliotecario {
                 .collect(Collectors.toList());
         
         if (usuariosOrdenados.isEmpty()) {
-            System.out.println("No hay usuarios con préstamos vencidos.");
+            System.out.println(lang.no_users_with_overdue);
         } else {
             for (Users user : usuariosOrdenados) {
-                System.out.println("\n Usuario: " + user.getUsername() +
-                                   "\n | Nombre: " + user.getName() +
-                                   "\n | Tipo: " + user.getTipo() +
-                                   "\n | Préstamos vencidos: " + user.getVencimientos());
+                System.out.println("\n"+ lang.user_more_returned  + user.getUsername() +
+                                   "\n"+ lang.name_more_returned  + user.getName() +
+                                   "\n"+ lang.type_more_returned  + user.getTipo() +
+                                   "\n"+ lang.overdue_loans_more_overdue  + user.getVencimientos());
             }
         }
 
     }
 
     public void mostrarUsuariosMasEntregados(){
-        System.out.println("Usuarios con más préstamos entregados:");
+        System.out.println(lang.users_with_more_returns);
         List<Users> usuariosOrdenados = users.values().stream()
                 .filter(user -> user.getEntregados() > 0)
                 .sorted(Comparator.comparing(Users::getEntregados, Comparator.reverseOrder())
@@ -481,36 +488,36 @@ public class Bibliotecario {
                 .collect(Collectors.toList());
         
         if (usuariosOrdenados.isEmpty()) {
-            System.out.println("No hay usuarios con préstamos entregados.");
+            System.out.println(lang.no_users_with_returns);
         } else {
             for (Users user : usuariosOrdenados) {
-                System.out.println("\n Usuario: " + user.getUsername() +
-                                   "\n | Nombre: " + user.getName() +
-                                   "\n | Tipo: " + user.getTipo() +
-                                   "\n | Préstamos entregados: " + user.getEntregados());
+                System.out.println("\n"+ lang.user_more_returned + user.getUsername() +
+                                   "\n"+ lang.name_more_returned + user.getName() +
+                                   "\n"+ lang.type_more_returned  + user.getTipo() +
+                                   "\n"+lang.returned_loans + user.getEntregados());
             }
         }
     }
 
     public void showBooksSorted(){
-        System.out.println("Libros ordenados por título:");
+        System.out.println(lang.books_arranged_by_title);
         List<Book> librosOrdenados = books.values().stream()
                 .sorted(Comparator.comparing(Book::getTitle))
                 .collect(Collectors.toList());
         
         if (librosOrdenados.isEmpty()) {
-            System.out.println("No hay libros en la biblioteca.");
+            System.out.println(lang.no_books_available_on_library);
         } else {
             for (Book book : librosOrdenados) {
                 System.out.println("╔═══════════════════╗");
-                System.out.println("║  "+book.getTitle()+"     ║");
+                System.out.println("║  "+book.getTitle());
                 System.out.println("╚═══════════════════╝");
                 System.out.println("╔═══════════════════╗");
-                System.out.println("║ Autor: " + book.getAuthor() );
-                System.out.println("║ ISBN: " + book.getIsbn() );
-                System.out.println("║ Género: " + book.getGenre() );
-                System.out.println("║ Año de publicación: " + book.getYear() );
-                System.out.println("║ " + (book.isAvailable() ? "Actualmente disponible" : "Actualmente prestado") );
+                System.out.println(lang.author_more_popular + book.getAuthor() );
+                System.out.println("║ "+lang.isbn + book.getIsbn() );
+                System.out.println("║ "+lang.genre + book.getGenre() );
+                System.out.println("║ "+lang.year_book + book.getYear() );
+                System.out.println("║ " + (book.isAvailable() ? lang.currently_available : lang.currently_borrowed) );
                 System.out.println("╚═══════════════════╝");
             }
         }
@@ -528,14 +535,14 @@ public class Bibliotecario {
         } else {
             for (Book book : librosOrdenados) {
                 System.out.println("╔═══════════════════╗");
-                System.out.println("║  "+book.getTitle()+"     ║");
+                System.out.println("║  "+book.getTitle());
                 System.out.println("╚═══════════════════╝");
                 System.out.println("╔═══════════════════╗");
-                System.out.println("║ Autor: " + book.getAuthor() );
-                System.out.println("║ ISBN: " + book.getIsbn() );
-                System.out.println("║ Género: " + book.getGenre() );
-                System.out.println("║ Año de publicación: " + book.getYear() );
-                System.out.println("║ " + (book.isAvailable() ? "Actualmente disponible" : "Actualmente prestado") );
+                System.out.println("║ "+lang.author + book.getAuthor() );
+                System.out.println("║ "+lang.isbn + book.getIsbn() );
+                System.out.println("║ "+lang.genre + book.getGenre() );
+                System.out.println("║ "+lang.year_book + book.getYear() );
+                System.out.println("║ " + (book.isAvailable() ? lang.currently_available : lang.currently_borrowed) );
                 System.out.println("╚═══════════════════╝");
             }
         }
@@ -543,7 +550,7 @@ public class Bibliotecario {
     
     public void mostrarLibrosMasPopulares() {
         cargarLibros();
-        System.out.println("Libros más populares:");
+        System.out.println(lang.popular_books);
         List<Book> librosOrdenados = books.values().stream()
                 .filter(book -> book.getPopularity() > 0)
                 .sorted(Comparator.comparing(Book::getPopularity, Comparator.reverseOrder())
@@ -551,13 +558,13 @@ public class Bibliotecario {
                 .collect(Collectors.toList());
         
         if (librosOrdenados.isEmpty()) {
-            System.out.println("No hay libros populares en la biblioteca.");
+            System.out.println(lang.no_popular_books);
         } else {
             for (Book book : librosOrdenados) {
-                System.out.println("\n Título: " + book.getTitle() +
-                                   "\n | Autor: " + book.getAuthor() +
-                                   "\n | ISBN: " + book.getIsbn() +
-                                   "\n | Veces que se ha prestado: " + book.getPopularity());
+                System.out.println("\n"+lang.title_more_popular + book.getTitle() +
+                                   "\n"+lang.author_more_popular + book.getAuthor() +
+                                   "\n"+lang.isbn_overdue_loans + book.getIsbn() +
+                                   "\n"+lang.times_more_popular + book.getPopularity());
             }
         }
     }
@@ -565,27 +572,27 @@ public class Bibliotecario {
 
     public void mostrarLibrosMenosPopulares() {
         cargarLibros();
-        System.out.println("Libros menos populares:");
+        System.out.println(lang.unpopular_books);
         List<Book> librosOrdenados = books.values().stream()
                 .sorted(Comparator.comparing(Book::getPopularity)
                         .thenComparing(Book::getTitle))
                 .collect(Collectors.toList());
         
         if (librosOrdenados.isEmpty()) {
-            System.out.println("No hay libros en la biblioteca.");
+            System.out.println(lang.no_books_on_library);
         } else {
             for (Book book : librosOrdenados) {
-                System.out.println("\n Título: " + book.getTitle() +
-                                   "\n | Autor: " + book.getAuthor() +
-                                   "\n | ISBN: " + book.getIsbn() +
-                                   "\n | Veces que se ha prestado: " + book.getPopularity());
+                System.out.println("\n"+lang.title_more_popular + book.getTitle() +
+                                   "\n"+lang.author_more_popular + book.getAuthor() +
+                                   "\n"+lang.isbn_overdue_loans + book.getIsbn() +
+                                   "\n"+lang.times_more_popular + book.getPopularity());
             }
         }
     }
 
     public void mostrarPrestamosAdministrador() {
         
-        System.out.println("Préstamos del mes:");
+        System.out.println(lang.loans_of_month);
         boolean tienePrestamos = false;
         for (Prestamos prestamo : prestamos) {
             String isbn = prestamo.getTitle();
@@ -598,70 +605,70 @@ public class Bibliotecario {
             if(prestamo.getStatus().equals("Vencido")){
                 fechaDevolucion = prestamo.getFechaFin();
             }
-            System.out.println("\n Libro: " + nombreLibro +
-                               "\n | ISBN: " + isbn +
-                               "\n | Usuario: " + prestamo.getUsername() +
-                               "\n | Fecha de préstamo: " + prestamo.getFechaInicio() +
-                               "\n | Fecha de devolución: " + fechaDevolucion);
+            System.out.println("\n"+lang.book_alone + nombreLibro +
+                               "\n"+lang.isbn_overdue_loans + isbn +
+                               "\n"+lang.user_overdue_loans + prestamo.getUsername() +
+                               "\n"+lang.borrow_date_admin_loans + prestamo.getFechaInicio() +
+                               "\n"+lang.return_date_overdue_loans + fechaDevolucion);
             tienePrestamos = true;
         }
         
         if (!tienePrestamos) {
-            System.out.println("No hay se han registrado prestamos en la biblioteca este mes.");
+            System.out.println(lang.no_loans_on_month);
         }
     }
 
     public void mostrarPrestamosActivosAdministrador() {
-        System.out.println("Préstamos activos:");
+        System.out.println(lang.active_loans);
         boolean tienePrestamos = false;
     
         for (Prestamos prestamo : prestamos) {
             if (!prestamo.getStatus().equals("Devuelto") && !prestamo.getStatus().equals("Vencido")) { // Filtrar solo los préstamos activos
                 String isbn = prestamo.getTitle();
                 String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
-                System.out.println("\n Libro: " + nombreLibro +
-                                   "\n | ISBN: " + isbn +
-                                   "\n | Usuario: " + prestamo.getUsername() +
-                                   "\n | Fecha de préstamo: " + prestamo.getFechaInicio() +
-                                   "\n | Fecha de devolución: " + prestamo.getFechaFin());
+                System.out.println("\n"+ lang.book_alone + nombreLibro +
+                                   "\n"+lang.isbn_overdue_loans + isbn +
+                                   "\n"+lang.user_overdue_loans + prestamo.getUsername() +
+                                   "\n"+ lang.borrow_date_admin_loans  + prestamo.getFechaInicio() +
+                                   "\n"+ lang.return_date_overdue_loans   + prestamo.getFechaFin());
                 tienePrestamos = true;
             }
         }
     
         if (!tienePrestamos) {
-            System.out.println("No hay préstamos activos en la biblioteca.");
+            System.out.println(lang.no_active_loans);
         }
     }
 
     public void mostrarPrestamosActivos(String username) {
         if (!users.containsKey(username)) {
-            System.out.println("Error: Usuario no encontrado.");
+            System.out.println(lang.user_not_found );
             return;
         }
     
-        System.out.println("Préstamos activos de " + username + ":");
+        System.out.println(lang.active_loans_of + username + ":");
         boolean tienePrestamos = false;
     
         for (Prestamos prestamo : prestamos) {
             if (prestamo.getUsername().equals(username) && prestamo.getStatus().equals("Prestado")) {
                 String isbn = prestamo.getTitle();
                 String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
-                System.out.println("\n Libro: " + nombreLibro +
-                                   "\n | ISBN: " + isbn +
-                                   "\n | Fecha de préstamo: " + prestamo.getFechaInicio() +
-                                   "\n | Fecha de devolución: " + prestamo.getFechaFin());
+                System.out.println("\n"+ lang.book_alone  + nombreLibro +
+                                   "\n"+ lang.isbn_overdue_loans + isbn +
+                                   "\n"+ lang.borrow_date_admin_loans + prestamo.getFechaInicio() +
+                                   "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin());
                 tienePrestamos = true;
             }
         }
     
         if (!tienePrestamos) {
-            System.out.println("No tienes préstamos activos.");
+            System.out.println(lang.asset_loans);
         }
     }
 
     public void addBook(String title, String author, String isbn, boolean available, int year, String genre) {
         if (books.containsKey(isbn)) {
-            System.out.println("Error: El libro ya está registrado.");
+            System.out.println(lang.error_book_already_registered);
             return;
         }
         Book newBook = new Book(title, author, isbn, available, year, genre, 0);
