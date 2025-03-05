@@ -60,6 +60,8 @@ public class Bibliotecario {
         devolverLibro("123", "jose");
         addPrestamo("123", "laura");
         devolverLibro("123", "laura");
+        addPrestamo("134", "ana");
+        forzarVencimientoPrestamo("134", "ana");
         addPrestamo("123", "laura");
         devolverLibro("123", "laura");
         addPrestamo("126", "laura");
@@ -67,22 +69,17 @@ public class Bibliotecario {
         addPrestamo("126", "laura");
         devolverLibro("126", "laura");
         addPrestamo("130", "laura");
+        addPrestamo("133", "luis");
+        forzarVencimientoPrestamo("133", "luis");
+        addPrestamo("128", "ana");
+        forzarVencimientoPrestamo("128", "ana");
         addPrestamo("124", "jose");
         addPrestamo("131", "pedro");
         addPrestamo("132", "pedro");
         addPrestamo("129", "pedro");
         devolverLibro("129", "pedro");
         devolverLibro("131", "pedro");
-        addPrestamo("125","juan");
-        addPrestamo("134", "luis");
-        forzarVencimientoPrestamo("134", "luis");
-        addPrestamo("128", "ana");
-        forzarVencimientoPrestamo("128", "ana");
-        addPrestamo("134", "ana");
-        forzarVencimientoPrestamo("134", "ana");
-        
-
-
+        addPrestamo("125","juan"); 
     }
 
     public void actualizarPrestamos() {
@@ -286,6 +283,7 @@ public class Bibliotecario {
         }
         return false;
     }
+    
     private void guardarPrestamos(){
         File file = new File(PRESTAMOS_FILE);
         file.getParentFile().mkdirs();
@@ -339,7 +337,7 @@ public class Bibliotecario {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 7) { // Ahora tiene 7 campos en lugar de 5
+                if (parts.length == 7) { 
                     Users user = new Users(parts[0], parts[1], Integer.parseInt(parts[2]), parts[3], parts[4], Integer.parseInt(parts[5]), Integer.parseInt(parts[6]));
                     users.put(parts[0], user);
                 }
@@ -467,7 +465,6 @@ public class Bibliotecario {
             for (Users user : usuariosOrdenados) {
                 System.out.println("\n Usuario: " + user.getUsername() +
                                    "\n | Nombre: " + user.getName() +
-                                   "\n | Edad: " + user.getAge() +
                                    "\n | Tipo: " + user.getTipo() +
                                    "\n | Préstamos vencidos: " + user.getVencimientos());
             }
@@ -489,7 +486,6 @@ public class Bibliotecario {
             for (Users user : usuariosOrdenados) {
                 System.out.println("\n Usuario: " + user.getUsername() +
                                    "\n | Nombre: " + user.getName() +
-                                   "\n | Edad: " + user.getAge() +
                                    "\n | Tipo: " + user.getTipo() +
                                    "\n | Préstamos entregados: " + user.getEntregados());
             }
@@ -504,6 +500,31 @@ public class Bibliotecario {
         
         if (librosOrdenados.isEmpty()) {
             System.out.println("No hay libros en la biblioteca.");
+        } else {
+            for (Book book : librosOrdenados) {
+                System.out.println("╔═══════════════════╗");
+                System.out.println("║  "+book.getTitle()+"     ║");
+                System.out.println("╚═══════════════════╝");
+                System.out.println("╔═══════════════════╗");
+                System.out.println("║ Autor: " + book.getAuthor() );
+                System.out.println("║ ISBN: " + book.getIsbn() );
+                System.out.println("║ Género: " + book.getGenre() );
+                System.out.println("║ Año de publicación: " + book.getYear() );
+                System.out.println("║ " + (book.isAvailable() ? "Actualmente disponible" : "Actualmente prestado") );
+                System.out.println("╚═══════════════════╝");
+            }
+        }
+    }
+
+    public void showBooksAvailableSorted(){
+        System.out.println("Libros disponibles ordenados por título:");
+        List<Book> librosOrdenados = books.values().stream()
+                .filter(Book::isAvailable)
+                .sorted(Comparator.comparing(Book::getTitle))
+                .collect(Collectors.toList());
+        
+        if (librosOrdenados.isEmpty()) {
+            System.out.println("No hay libros disponibles en la biblioteca.");
         } else {
             for (Book book : librosOrdenados) {
                 System.out.println("╔═══════════════════╗");
@@ -536,7 +557,7 @@ public class Bibliotecario {
                 System.out.println("\n Título: " + book.getTitle() +
                                    "\n | Autor: " + book.getAuthor() +
                                    "\n | ISBN: " + book.getIsbn() +
-                                   "\n | Popularidad: " + book.getPopularity());
+                                   "\n | Veces que se ha prestado: " + book.getPopularity());
             }
         }
     }
@@ -557,7 +578,7 @@ public class Bibliotecario {
                 System.out.println("\n Título: " + book.getTitle() +
                                    "\n | Autor: " + book.getAuthor() +
                                    "\n | ISBN: " + book.getIsbn() +
-                                   "\n | Popularidad: " + book.getPopularity());
+                                   "\n | Veces que se ha prestado: " + book.getPopularity());
             }
         }
     }
@@ -574,7 +595,9 @@ public class Bibliotecario {
             if (prestamo.getStatus().equals("Devuelto")) {
                 fechaDevolucion = prestamo.getFechaDevolucion(); 
             }
-            
+            if(prestamo.getStatus().equals("Vencido")){
+                fechaDevolucion = prestamo.getFechaFin();
+            }
             System.out.println("\n Libro: " + nombreLibro +
                                "\n | ISBN: " + isbn +
                                "\n | Usuario: " + prestamo.getUsername() +

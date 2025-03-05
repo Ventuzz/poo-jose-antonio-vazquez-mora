@@ -272,24 +272,7 @@ public class CLI {
             }
         }
 
-        /**
-        * Método que se encarga de mostrar la información de un libro  
-        * @param book
-        * @return void
-        */
         
-        public static void showBook(Book book) {
-            System.out.println("╔═══════════════════╗");
-            System.out.println("║      "+book.getTitle()+"     ║");
-            System.out.println("╚═══════════════════╝");
-            System.out.println("╔═══════════════════╗");
-            System.out.println("║ Autor: " + book.getAuthor() );
-            System.out.println("║ ISBN: " + book.getIsbn() );
-            System.out.println("║ Género: " + book.getGenre() );
-            System.out.println("║ Año de publicación: " + book.getYear() );
-            System.out.println("║ " + (book.isAvailable() ? "Actualmente disponible" : "Actualmente prestado") );
-            System.out.println("╚═══════════════════╝");
-        }
         /**
         * Método que se encarga de mostrar la información de un usuario
         * @param user
@@ -349,19 +332,7 @@ public class CLI {
         public static void showAdminMenuAdvance(){
         System.out.println(lang.menu_admin_advance);
         }
-
-        public static void showAvailableBooks(){
-            if (bibliotecario.getBooks().isEmpty()) {
-                System.out.println("No hay libros disponibles");
-            } else {
-                System.out.println("Libros disponibles:");
-                bibliotecario.getBooks().forEach((k, v) -> {
-                    if (v.isAvailable()) {
-                        showBook(v);
-                    }
-                });
-            }
-        }
+        
             /**
              * Método que se encarga de mostrar el menú de usuario
              * @return void
@@ -387,18 +358,10 @@ public class CLI {
         
                     switch (option) {
                         /**
-                        * Opción para mostrar las personas registradas en el sistema
-                        * @return void
-                        */
-                        case 1:
-                            System.out.println(lang.registered_people);
-                            bibliotecario.getUsers().forEach((k, v) -> showUser(v));
-                            break;
-                        /**
                         * Opción para agregar un libro al catálogo
                         * @return void
                         */
-                        case 2:
+                        case 1:
                             System.out.println(lang.enter_book_title_prompt);
                             String title;
                             while (true) {
@@ -480,53 +443,86 @@ public class CLI {
                         * Opción para mostrar los libros disponibles en el catálogo
                         * @return void
                         */
-                        case 3:
-                            System.out.println(lang.show_books_in_catalog_message);
-                            //bibliotecario.getBooks().forEach((k, v) -> showBook(v));
-                            bibliotecario.showBooksSorted();
-                            break;
                         /**
                         * Opción para mostrar los préstamos activos
                         * @return void
                         */
-                        case 4:
+                        case 2:
+                            bibliotecario.actualizarPrestamos();
+                            bibliotecario.addPrestamoVencido();
+                            System.out.println("Se han actualizado los préstamos");
+                            break;
+                        case 3:
                             bibliotecario.mostrarPrestamosActivosAdministrador();
                             break;
                         /**
                         * Opción para salir del menú de administrador
                         * @return void
                         */
-                        case 5: 
-                            bibliotecario.mostrarPrestamosAdministrador();
+                        case 4:
+                            adminAdvanceMenu();                       
                             break;
-                        case 6:
-                            bibliotecario.mostrarLibrosMasPopulares();
-                            break;
-                        case 7:
-                            bibliotecario.mostrarLibrosMenosPopulares();
-                            break;
-                        case 8:
-                            bibliotecario.actualizarPrestamos();
-                            bibliotecario.addPrestamoVencido();
-                            break;
-                        case 9:
-                            bibliotecario.mostrarPrestamosVencidos();
-                            break;
-                        case 10:
-                            bibliotecario.mostrarUsuariosVencidos();
-                            break;
-                        case 11:
-                            bibliotecario.mostrarUsuariosMasVencidos();
-                            break;
-                        case 12:
-                            bibliotecario.mostrarUsuariosMasEntregados();
-                            break;
-
-                        case 13:
+                        case 5:
                             System.out.println(lang.exit_admin);
                             break; 
                     }
                 }
+        }
+        public static void adminAdvanceMenu(){
+            Scanner scanner = new Scanner(System.in);
+            int option = -1;
+            while (option != 10) {
+                showAdminMenuAdvance();
+                System.out.print(lang.select_an_option);
+                String userInput = scanner.nextLine().trim();
+    
+                try {
+                    option = Integer.parseInt(userInput);
+                    if (option < 1 || option > 10) {
+                        System.out.println(lang.invalid_option);
+                        continue;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(lang.invalid_input_not_number);
+                    continue;
+                }
+    
+                switch (option) {
+                    
+                    case 1:
+                    System.out.println(lang.registered_people);
+                    bibliotecario.getUsers().forEach((k, v) -> { showUser(v); });
+                    break;
+                    case 2:
+                    System.out.println(lang.show_books_in_catalog_message);
+                    bibliotecario.showBooksSorted();
+                    break;
+                    case 3:
+                    bibliotecario.mostrarPrestamosAdministrador();
+                    break;
+                    case 4:
+                    bibliotecario.mostrarLibrosMasPopulares();
+                    break;
+                    case 5:
+                    bibliotecario.mostrarLibrosMenosPopulares();
+                    break;
+                    case 6:
+                    bibliotecario.mostrarPrestamosVencidos();
+                    break;
+                    case 7:
+                    bibliotecario.mostrarUsuariosVencidos();
+                            break;
+                    case 8:
+                    bibliotecario.mostrarUsuariosMasVencidos();
+                            break;
+                    case 9:
+                    bibliotecario.mostrarUsuariosMasEntregados();
+                            break;
+                    case 10:
+                    System.out.println(lang.exit_admin);
+                    break;
+                }
+            }     
         }
         /**
         * Método que se encarga de mostrar el menú de usuario
@@ -565,7 +561,7 @@ public class CLI {
                     */
                     case 1:
                         System.out.println(lang.show_books_in_catalog_message);
-                        showAvailableBooks();
+                        bibliotecario.showBooksAvailableSorted();
                         break;
 
                     /**
@@ -660,7 +656,7 @@ public class CLI {
                     */
                     case 1:
                         System.out.println(lang.show_books_in_catalog_message);
-                        showAvailableBooks();
+                        bibliotecario.showBooksAvailableSorted();
                         break;
                     /**
                     * Opción para salir del menú de usuario
@@ -710,7 +706,7 @@ public class CLI {
                     */
                     case 1:
                         System.out.println(lang.show_books_in_catalog_message);
-                        showAvailableBooks();
+                        bibliotecario.showBooksAvailableSorted();
                         break;
 
                     /**
@@ -805,7 +801,7 @@ public class CLI {
                     */
                     case 1:
                         System.out.println(lang.show_books_in_catalog_message);
-                        showAvailableBooks();
+                        bibliotecario.showBooksAvailableSorted();
                         break;
 
                     /**
