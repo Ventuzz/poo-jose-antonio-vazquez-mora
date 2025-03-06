@@ -1,5 +1,8 @@
 package edu.jose.vazquez.actividades.proyectofinal.models;
 
+/**
+ * Clase que representa un libro dentro de la biblioteca
+ */
 public class Book {
     private String title;
     private String author;
@@ -9,7 +12,16 @@ public class Book {
     private String genre;
     private int popularity;
 
-
+    /**
+     * Constructor de la clase Book que inicializa los atributos de la clase con los valores pasados como argumentos
+     * @param title
+     * @param author
+     * @param isbn
+     * @param available
+     * @param year
+     * @param genre
+     * @param popularity
+     */
     public Book(String title, String author, String isbn, boolean available, int year, String genre, int popularity) {
         setTitle(title);
         setAuthor(author);
@@ -19,7 +31,10 @@ public class Book {
         setGenre(genre);
         setPopularity(popularity);
     }
-
+    /**
+     * Método que verifica si el libro está disponible
+     * @return
+     */
     public boolean isAvailable(){
         if(!available){
             available=false;
@@ -27,7 +42,10 @@ public class Book {
         }
         return true;
     }
-
+    /**
+     * Metodo que actualiza la disponibilidad del libro cuando se devuelve
+     * @return
+     */
     public boolean returnBook(){
         if (available) {
             available= true;

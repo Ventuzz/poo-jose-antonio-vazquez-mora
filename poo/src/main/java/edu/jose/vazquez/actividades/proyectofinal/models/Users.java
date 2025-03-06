@@ -12,7 +12,16 @@ public class Users {
     private String tipo;
     private int vencimientos;
     private int entregados;
-
+    /**
+     * Constructor de la clase Users que inicializa los atributos de la clase con los valores pasados como argumentos
+     * @param username
+     * @param password
+     * @param age
+     * @param name
+     * @param tipo
+     * @param entregados
+     * @param vencimientos
+     */
     public Users(String username, String password, int age, String name, String tipo, int entregados, int vencimientos) {
         setUsername(username);
         setPassword(password);

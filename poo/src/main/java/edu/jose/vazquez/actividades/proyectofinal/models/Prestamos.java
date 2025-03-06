@@ -1,6 +1,8 @@
 package edu.jose.vazquez.actividades.proyectofinal.models;
 
-
+/**
+ * Clase que representa un préstamo de un libro
+ */
 public class Prestamos {
     private String title;
     private String username;
@@ -8,7 +10,14 @@ public class Prestamos {
     private String fechaFin;
     private String status;
     private String fechaDevolucion;
-    
+    /**
+     * Constructor de la clase Prestamos que inicializa los atributos de la clase con los valores pasados como argumentos
+     * @param title
+     * @param username
+     * @param fechaInicio
+     * @param fechaFin
+     * @param status
+     */
     public Prestamos(String title, String username, String fechaInicio, String fechaFin, String status) {
         setTitle(title);
         setUsername(username);

@@ -1,5 +1,7 @@
 package edu.jose.vazquez.actividades.proyectofinal.lang;
-
+/**
+ * Clase que contiene los mensajes del programa en japonés
+ */
 public class Jap extends Lang{
     public Jap(){
         menu_login = 
@@ -85,7 +87,10 @@ goodbye =
       "\n╔═════════════╗\n" +
         "║  さようなら ║\n" +
         "╚═════════════╝";
-
+ exit_admin_advance = 
+        "\n╔═════════════════════════════╗\n" +
+        "║   レコードから退出します  ║\n" +
+        "╚═════════════════════════════╝";
 register_user = 
       "\n╔═════════════════════════════════════════════════╗\n" +
         "║ 登録するためにユーザー名を入力してください          ║\n" +

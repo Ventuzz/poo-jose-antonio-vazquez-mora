@@ -1,5 +1,7 @@
 package edu.jose.vazquez.actividades.proyectofinal.lang;
-
+/**
+ * Clase que se encarga de gestionar los mensajes en español
+ */
 public class Esp extends Lang{
 
     public Esp(){
@@ -25,12 +27,12 @@ public class Esp extends Lang{
                 "║     2. Verificación estado de los prestamos               ║\n" +
                 "║     3. Ver préstamos activos                              ║\n" +
                 "║     4. Gestionar registros                                ║\n" +
-                "║     5. Salir                                             ║\n" +
+                "║     5. Salir                                              ║\n" +
                 "╚═══════════════════════════════════════════════════════════╝";
 
         menu_admin_advance = 
               "\n╔═══════════════════════════════════════════════════════════╗\n" +
-                "║                 Registros                                 ║\n" +
+                "║                         Registros                         ║\n" +
                 "╠═══════════════════════════════════════════════════════════╣\n" +
                 "║     1. Consultar personas registradas en la biblioteca    ║\n" +
                 "║     2. Mostrar libros en stock                            ║\n" +
@@ -135,6 +137,10 @@ public class Esp extends Lang{
                 "║ Ingresa el título del libro  ║\n" +
                 "╚══════════════════════════════╝\n";
 
+        exit_admin_advance = 
+              "\n╔═════════════════════════════╗\n" +
+                "║  Saliendo de los registros  ║\n" +
+                "╚═════════════════════════════╝";
         invalid_title = 
                 "\n╔═════════════════════════════════════════════════════════╗\n" +
                 "║  El libro debe tener un nombre, inténtalo de nuevo      ║\n" +

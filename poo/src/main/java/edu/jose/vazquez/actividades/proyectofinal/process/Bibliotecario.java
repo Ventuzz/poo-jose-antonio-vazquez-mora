@@ -22,6 +22,7 @@ import edu.jose.vazquez.actividades.proyectofinal.lang.Esp;
 import edu.jose.vazquez.actividades.proyectofinal.lang.Eng;
 import edu.jose.vazquez.actividades.proyectofinal.lang.Jap;
 import edu.jose.vazquez.actividades.proyectofinal.models.Prestamos;
+import edu.jose.vazquez.actividades.proyectofinal.utils.Colores;
 
 public class Bibliotecario {
     private Lang lang=new Lang();
@@ -31,10 +32,16 @@ public class Bibliotecario {
     private static final String USERS_FILE = "src/main/java/edu/jose/vazquez/actividades/proyectofinal/data/usuarios.txt";
     private static final String BOOKS_FILE = "src/main/java/edu/jose/vazquez/actividades/proyectofinal/data/libros.txt";
     private static final String PRESTAMOS_FILE = "src/main/java/edu/jose/vazquez/actividades/proyectofinal/data/prestamos.txt";
-
+    /**
+     * Metodo que se encarga de fijar el idioma en el que funcionará nuestro programa
+     * @param lang
+     */
     public void setLang(Lang lang){
         this.lang=lang;
     }
+    /**
+     * Constructor de la clase bibliotecario que arranca con varios prestamos vencidos, inicializados y devueltos para el funcionamiento de nuestro programa
+     */
     public Bibliotecario() {
         this.users = new HashMap<>();
         this.books = new HashMap<>();
@@ -88,7 +95,9 @@ public class Bibliotecario {
         devolverLibro("131", "pedro");
         addPrestamo("125","juan"); 
     }
-
+    /**
+     * Metodo que se encarga de corroborar la fecha de los prestamos para actualizar sus estados en caso de estar vencidos o devueltos
+     */
     public void actualizarPrestamos() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date currentDate = new Date();
@@ -104,14 +113,18 @@ public class Bibliotecario {
 
                     }
                 } catch (ParseException e) {
-                    System.out.println(lang.error_modifing_date+ e.getMessage());
+                    System.out.println(Colores.red+lang.error_modifing_date+ e.getMessage()+Colores.reset);
                 }
             }
         }
         guardarPrestamos();
         guardarUsuarios();
     }
-
+    /**
+     * Metodo que se encarga de hacer que el prestamo de un libro para un usuario este vencido
+     * @param isbn
+     * @param username
+     */
     public void forzarVencimientoPrestamo(String isbn, String username) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
@@ -131,11 +144,14 @@ public class Bibliotecario {
         if (encontrado) {
             guardarPrestamos(); 
         } else {
-            System.out.println(lang.user_and_book_not_found);
+            System.out.println(Colores.red+lang.user_and_book_not_found+Colores.reset);
         }
     }
+    /**
+     * Metodo que muestra los prestamos vencidos en la biblioteca
+     */
     public void mostrarPrestamosVencidos(){
-        System.out.println(lang.overdue_loans);
+        System.out.println(Colores.dark_red+lang.overdue_loans+Colores.reset);
         boolean tienePrestamos = false;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
@@ -147,23 +163,25 @@ public class Bibliotecario {
                     if (currentDate.after(returnDate)) {
                         String isbn = prestamo.getTitle();
                         String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
-                        System.out.println("\n"+ lang.book_alone + nombreLibro +
+                        System.out.println(Colores.dark_red+"\n"+ lang.book_alone + nombreLibro +
                                            "\n"+ lang.isbn_overdue_loans + isbn +
                                            "\n"+ lang.user_overdue_loans + prestamo.getUsername() +
-                                           "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin());
+                                           "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin()+Colores.reset);
                         tienePrestamos = true;
                     }
                 } catch (Exception e) {
-                    System.out.println(lang.error_comparing_dates + e.getMessage());
+                    System.out.println(Colores.red+lang.error_comparing_dates + e.getMessage()+Colores.reset);
                 }
             }
         }
         if (!tienePrestamos) {
-            System.out.println(lang.no_overdue_loans);
+            System.out.println(Colores.red+lang.no_overdue_loans+Colores.reset);
         }
     }
 
-
+    /**
+     * Metodo que se encarga de añadir un prestamo vencido a la lista de prestamos de la biblioteca
+     */
     public void addPrestamoVencido(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
@@ -180,17 +198,23 @@ public class Bibliotecario {
                         guardarPrestamos();
                     }
                 } catch (Exception e) {
-                    System.out.println(lang.error_comparing_dates + e.getMessage());
+                    System.out.println(Colores.red+lang.error_comparing_dates + e.getMessage()+Colores.reset);
                 }
             }
         }
     }
 
-
+/**
+ * Metodo que se encarga de agregar un libro a la biblioteca con los datos proporcionados por el usuario y lo guarda en un archivo
+ * @param username
+ * @param password
+ * @param age
+ * @param name
+ */
 
     public void addUser(String username, String password, int age, String name) {
         if (users.containsKey(username)) {
-            System.out.println(lang.error_already_exists);
+            System.out.println(Colores.red+lang.error_already_exists+Colores.reset);
             return;
         }
 
@@ -210,18 +234,23 @@ public class Bibliotecario {
         users.put(username, newUser);
         guardarUsuarios();
     }
-
+    /**
+     * Metodo que se encarga de añadir un prestamo de un libro a un usuario en la biblioteca y lo guarda en un archivo de prestamos para tener los registros
+     * @param isbn
+     * @param username
+     * @return
+     */
     public Boolean addPrestamo(String isbn, String username) {
         if (!users.containsKey(username)) {
-            System.out.println(lang.user_not_found);
+            System.out.println(Colores.red+lang.user_not_found+Colores.reset);
             return false;
         }
         if (!books.containsKey(isbn)) {
-            System.out.println(lang.book_not_found);
+            System.out.println(Colores.red+lang.book_not_found+Colores.reset);
             return false;
         }
         if (!books.get(isbn).isAvailable()) {
-            System.out.println(lang.book_not_available);
+            System.out.println(Colores.red+lang.book_not_available+Colores.reset);
             return false;
         }
         Users user = users.get(username);
@@ -229,19 +258,19 @@ public class Bibliotecario {
         switch (user.getTipo()) {
             case "Usuario teens":
                 if (prestamosActuales >= 1) {
-                    System.out.println(lang.overload_teens);
+                    System.out.println(Colores.black+lang.overload_teens+Colores.reset);
                     return false;
                 }
                 break;
             case "Usuario adulto":
                 if (prestamosActuales >= 2) {
-                    System.out.println(lang.overload_adult);
+                    System.out.println(Colores.dark_green+lang.overload_adult+Colores.reset);
                     return false;
                 }
                 break;
             case "Usuario VIP":
                 if (prestamosActuales >= 5){
-                    System.out.println(lang.overload_vip);
+                    System.out.println(Colores.gold+lang.overload_vip+Colores.reset);
                     return false;
                 } 
                 break;
@@ -290,7 +319,9 @@ public class Bibliotecario {
         }
         return false;
     }
-    
+    /**
+     * Metodo que se encarga de guardar el prestamo en un archivo de prestamos
+     */
     private void guardarPrestamos(){
         File file = new File(PRESTAMOS_FILE);
         file.getParentFile().mkdirs();
@@ -300,14 +331,16 @@ public class Bibliotecario {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println(lang.error_saving_loans + e.getMessage());
+            System.out.println(Colores.red+lang.error_saving_loans + e.getMessage()+Colores.reset);
         }
     }
-
+    /**
+     * Metodo que se encarga de cargar los prestamos de un archivo de prestamos
+     */
     private void cargarPrestamos(){
         File file = new File(PRESTAMOS_FILE);
         if (!file.exists()) {
-            System.out.println(lang.loans_data_not_found);
+            System.out.println(Colores.red+lang.loans_data_not_found+Colores.reset);
             return;
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(PRESTAMOS_FILE))) {
@@ -320,9 +353,12 @@ public class Bibliotecario {
                 }
             }
         } catch (IOException e) {
-            System.out.println(lang.loans_data_not_found);
+            System.out.println(Colores.red+lang.loans_data_not_found+Colores.reset);
         }
     }
+    /**
+     * Metodo que se encarga de guardar los usuarios en un archivo de usuarios
+     */
     private void guardarUsuarios() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE))) {
             for (Users user : users.values()) {
@@ -330,14 +366,16 @@ public class Bibliotecario {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println(lang.error_saving_user + e.getMessage());
+            System.out.println(Colores.red+lang.error_saving_user + e.getMessage()+Colores.reset);
         }
     }
-
+    /**
+     * Metodo que se encarga de cargar los usuarios de un archivo de usuarios
+     */
     private void cargarUsuarios() {
         File file = new File(USERS_FILE);
         if (!file.exists()) {
-            System.out.println(lang.user_data_not_found);
+            System.out.println(Colores.red+lang.user_data_not_found+Colores.reset);
             return;
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE))) {
@@ -350,10 +388,13 @@ public class Bibliotecario {
                 }
             }
         } catch (IOException e) {
-            System.out.println(lang.error_loading_user);
+            System.out.println(Colores.red+lang.error_loading_user+Colores.reset);
         }
     }
 
+    /**
+     * Metodo que se encarga de guardar los libros creados en un archivo de libros
+     */
     private void guardarLibros() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(BOOKS_FILE))) {
             for (Book book : books.values()) {
@@ -361,14 +402,16 @@ public class Bibliotecario {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println(lang.error_saving_books + e.getMessage());
+            System.out.println(Colores.red+lang.error_saving_books + e.getMessage()+Colores.reset);
         }
     }
-
+    /**
+     * Metodo que se encarga de cargar los libros de un archivo de libros
+     */
     public void cargarLibros() {
         File file = new File(BOOKS_FILE);
         if (!file.exists()) {
-            System.out.println(lang.book_data_not_found);
+            System.out.println(Colores.red+lang.book_data_not_found+Colores.reset);
             return;
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(BOOKS_FILE))) {
@@ -381,10 +424,14 @@ public class Bibliotecario {
                 }
             }
         } catch (IOException e) {
-            System.out.println(lang.error_loading_books);
+            System.out.println(Colores.red+lang.error_loading_books+Colores.reset);
         }
     }
-    
+    /**
+     * Metodo que se encarga de revisar cuantos libros prestados tiene el usuario a la vez
+     * @param username
+     * @return
+     */
     public int librosPrestados(String username) {
         int prestados = 0;
         for (Prestamos prestamo : prestamos) {
@@ -394,11 +441,15 @@ public class Bibliotecario {
         }
         return prestados;
     }
-
+    /**
+     * Metodo que se encarga de definir al usuario por su edad en alguna de todas las clases de usuario registradas con anterioridad (vip, jr, teens, adulto)
+     * @param username
+     * @return
+     */
     public String validarUsuario(String username) {
         Users user = users.get(username);
         if (user == null) {
-            System.out.println(lang.user_not_found );
+            System.out.println(Colores.red+lang.user_not_found+Colores.reset);
             return "Desconocido";
         }
 
@@ -408,14 +459,18 @@ public class Bibliotecario {
         if (age <=0) return "Usuario VIP";
         return "Usuario adulto";
     }
-
+    /**
+     * Metodo para la devolucion de un libro prestado por un usuario, actualiza el estado del prestamo y del libro en la biblioteca
+     * @param isbn
+     * @param username
+     */
     public void devolverLibro(String isbn, String username) {
         if (!users.containsKey(username)) {
-            System.out.println(lang.user_not_found);
+            System.out.println(Colores.red+lang.user_not_found+Colores.reset);
             return;
         }
         if (!books.containsKey(isbn)) {
-            System.out.println(lang.book_not_found);
+            System.out.println(Colores.red+lang.book_not_found+Colores.reset);
             return;
         }
         for (Prestamos prestamo : prestamos) {
@@ -427,39 +482,43 @@ public class Bibliotecario {
                 Date currentDate = calendar.getTime();
                 prestamo.setFechaDevolucion(dateFormat.format(currentDate));
                 users.get(username).setEntregados(users.get(username).getEntregados() + 1);
-                System.out.println(lang.succesfuly_returned);
+                System.out.println(Colores.green+lang.succesfuly_returned+Colores.reset);
                 guardarPrestamos();
                 guardarUsuarios();
                 guardarLibros();
                 return;
             }
         }
-        System.out.println(lang.book_not_borrowed);
+        System.out.println(Colores.red+lang.book_not_borrowed+Colores.reset);
     }
 
 
-
+/**
+ * Metodo que muestra los usuarios que tengan prestamos vencidos en la biblioteca
+ */
     public void mostrarUsuariosVencidos(){
-        System.out.println(lang.users_with_overdue);
+        System.out.println(Colores.light_blue+lang.users_with_overdue+Colores.reset);
         boolean tienePrestamos = false;
         for (Prestamos prestamo : prestamos) {
             if (prestamo.getStatus().equals("Vencido")) {
                 String isbn = prestamo.getTitle();
                 String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
-                System.out.println("\n"+ lang.user_more_returned   + prestamo.getUsername() +
+                System.out.println(Colores.dark_green+"\n"+ lang.user_more_returned   + prestamo.getUsername() +
                                    "\n"+ lang.book_more_overdue  + nombreLibro +
                                    "\n"+lang.isbn_overdue_loans  + isbn +
-                                   "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin());
+                                   "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin()+Colores.reset);
                 tienePrestamos = true;
             }
         }
         if (!tienePrestamos) {
-            System.out.println(lang.no_users_with_overdue);
+            System.out.println(Colores.red+lang.no_users_with_overdue+Colores.reset);
         }
     }
-
+/**
+ * Metodo que muestra una lista de usuarios que tengas más prestamos vencidos, una lista negra de usuarios organizados por la cantidad de prestamos vencidos
+ */
     public void mostrarUsuariosMasVencidos(){
-        System.out.println(lang.users_with_more_overdue);
+        System.out.println(Colores.red+lang.users_with_more_overdue+Colores.reset);
         List<Users> usuariosOrdenados = users.values().stream()
                 .filter(user -> user.getVencimientos() > 0)
                 .sorted(Comparator.comparing(Users::getVencimientos, Comparator.reverseOrder())
@@ -467,20 +526,22 @@ public class Bibliotecario {
                 .collect(Collectors.toList());
         
         if (usuariosOrdenados.isEmpty()) {
-            System.out.println(lang.no_users_with_overdue);
+            System.out.println(Colores.red+lang.no_users_with_overdue+Colores.reset);
         } else {
             for (Users user : usuariosOrdenados) {
-                System.out.println("\n"+ lang.user_more_returned  + user.getUsername() +
+                System.out.println(Colores.light_gray+"\n"+ lang.user_more_returned  + user.getUsername() +
                                    "\n"+ lang.name_more_returned  + user.getName() +
                                    "\n"+ lang.type_more_returned  + user.getTipo() +
-                                   "\n"+ lang.overdue_loans_more_overdue  + user.getVencimientos());
+                                   "\n"+ lang.overdue_loans_more_overdue  + user.getVencimientos()+Colores.reset);
             }
         }
 
     }
-
+/**
+ * Metodo que muestra una lista de honor de usuarios que tengan más prestamos entregados, una lista de usuarios organizados por la cantidad de prestamos entregados
+ */
     public void mostrarUsuariosMasEntregados(){
-        System.out.println(lang.users_with_more_returns);
+        System.out.println(Colores.dark_green+lang.users_with_more_returns+Colores.reset);
         List<Users> usuariosOrdenados = users.values().stream()
                 .filter(user -> user.getEntregados() > 0)
                 .sorted(Comparator.comparing(Users::getEntregados, Comparator.reverseOrder())
@@ -488,28 +549,30 @@ public class Bibliotecario {
                 .collect(Collectors.toList());
         
         if (usuariosOrdenados.isEmpty()) {
-            System.out.println(lang.no_users_with_returns);
+            System.out.println(Colores.red+lang.no_users_with_returns+Colores.reset);
         } else {
             for (Users user : usuariosOrdenados) {
-                System.out.println("\n"+ lang.user_more_returned + user.getUsername() +
+                System.out.println(Colores.cyan+"\n"+ lang.user_more_returned + user.getUsername() +
                                    "\n"+ lang.name_more_returned + user.getName() +
                                    "\n"+ lang.type_more_returned  + user.getTipo() +
-                                   "\n"+lang.returned_loans + user.getEntregados());
+                                   "\n"+lang.returned_loans + user.getEntregados()+Colores.reset);
             }
         }
     }
-
+/**
+ * Metodo que muestra los libros de la biblioteca ordenados por titulo en orden alfabetico
+ */
     public void showBooksSorted(){
-        System.out.println(lang.books_arranged_by_title);
+        System.out.println(Colores.dark_gray+lang.books_arranged_by_title+Colores.reset);
         List<Book> librosOrdenados = books.values().stream()
                 .sorted(Comparator.comparing(Book::getTitle))
                 .collect(Collectors.toList());
         
         if (librosOrdenados.isEmpty()) {
-            System.out.println(lang.no_books_available_on_library);
+            System.out.println(Colores.red+lang.no_books_available_on_library+Colores.reset);
         } else {
             for (Book book : librosOrdenados) {
-                System.out.println("╔═══════════════════╗");
+                System.out.println(Colores.silver+"╔═══════════════════╗");
                 System.out.println("║  "+book.getTitle());
                 System.out.println("╚═══════════════════╝");
                 System.out.println("╔═══════════════════╗");
@@ -518,23 +581,25 @@ public class Bibliotecario {
                 System.out.println("║ "+lang.genre + book.getGenre() );
                 System.out.println("║ "+lang.year_book + book.getYear() );
                 System.out.println("║ " + (book.isAvailable() ? lang.currently_available : lang.currently_borrowed) );
-                System.out.println("╚═══════════════════╝");
+                System.out.println("╚═══════════════════╝"+Colores.reset);
             }
         }
     }
-
+/**
+ * Metodo que muestra los libros ordenamos de manera alfabetica pero solo mostrando los que están disponibles para prestamo
+ */
     public void showBooksAvailableSorted(){
-        System.out.println("Libros disponibles ordenados por título:");
+        System.out.println(Colores.light_green+"Libros disponibles ordenados por título:"+Colores.reset);
         List<Book> librosOrdenados = books.values().stream()
                 .filter(Book::isAvailable)
                 .sorted(Comparator.comparing(Book::getTitle))
                 .collect(Collectors.toList());
         
         if (librosOrdenados.isEmpty()) {
-            System.out.println("No hay libros disponibles en la biblioteca.");
+            System.out.println(Colores.red+"No hay libros disponibles en la biblioteca."+Colores.reset);
         } else {
             for (Book book : librosOrdenados) {
-                System.out.println("╔═══════════════════╗");
+                System.out.println(Colores.bold+"╔═══════════════════╗");
                 System.out.println("║  "+book.getTitle());
                 System.out.println("╚═══════════════════╝");
                 System.out.println("╔═══════════════════╗");
@@ -543,14 +608,16 @@ public class Bibliotecario {
                 System.out.println("║ "+lang.genre + book.getGenre() );
                 System.out.println("║ "+lang.year_book + book.getYear() );
                 System.out.println("║ " + (book.isAvailable() ? lang.currently_available : lang.currently_borrowed) );
-                System.out.println("╚═══════════════════╝");
+                System.out.println("╚═══════════════════╝"+Colores.reset);
             }
         }
     }
-    
+    /**
+     * Metodo que muestra los libros ordenados por popularidad, mostrando los libros más populares primero
+     */
     public void mostrarLibrosMasPopulares() {
         cargarLibros();
-        System.out.println(lang.popular_books);
+        System.out.println(Colores.violet+lang.popular_books+Colores.reset);
         List<Book> librosOrdenados = books.values().stream()
                 .filter(book -> book.getPopularity() > 0)
                 .sorted(Comparator.comparing(Book::getPopularity, Comparator.reverseOrder())
@@ -558,41 +625,45 @@ public class Bibliotecario {
                 .collect(Collectors.toList());
         
         if (librosOrdenados.isEmpty()) {
-            System.out.println(lang.no_popular_books);
+            System.out.println(Colores.red+lang.no_popular_books+Colores.reset);
         } else {
             for (Book book : librosOrdenados) {
-                System.out.println("\n"+lang.title_more_popular + book.getTitle() +
+                System.out.println(Colores.dark_red+"\n"+lang.title_more_popular + book.getTitle() +
                                    "\n"+lang.author_more_popular + book.getAuthor() +
                                    "\n"+lang.isbn_overdue_loans + book.getIsbn() +
-                                   "\n"+lang.times_more_popular + book.getPopularity());
+                                   "\n"+lang.times_more_popular + book.getPopularity()+Colores.reset);
             }
         }
     }
-
+    /**
+     * Metodo que muestra los libros menos populares de la biblioteca, mostrando los libros menos populares primero
+     */
 
     public void mostrarLibrosMenosPopulares() {
         cargarLibros();
-        System.out.println(lang.unpopular_books);
+        System.out.println(Colores.pink+lang.unpopular_books+Colores.reset);
         List<Book> librosOrdenados = books.values().stream()
                 .sorted(Comparator.comparing(Book::getPopularity)
                         .thenComparing(Book::getTitle))
                 .collect(Collectors.toList());
         
         if (librosOrdenados.isEmpty()) {
-            System.out.println(lang.no_books_on_library);
+            System.out.println(Colores.red+lang.no_books_on_library+Colores.reset);
         } else {
             for (Book book : librosOrdenados) {
-                System.out.println("\n"+lang.title_more_popular + book.getTitle() +
+                System.out.println(Colores.dark_blue+"\n"+lang.title_more_popular + book.getTitle() +
                                    "\n"+lang.author_more_popular + book.getAuthor() +
                                    "\n"+lang.isbn_overdue_loans + book.getIsbn() +
-                                   "\n"+lang.times_more_popular + book.getPopularity());
+                                   "\n"+lang.times_more_popular + book.getPopularity()+Colores.reset);
             }
         }
     }
-
+    /**
+     * Metodo que muestra los prestamos que se han hecho en la biblioteca a lo largo de este mes
+     */
     public void mostrarPrestamosAdministrador() {
         
-        System.out.println(lang.loans_of_month);
+        System.out.println(Colores.purple+lang.loans_of_month+Colores.reset);
         boolean tienePrestamos = false;
         for (Prestamos prestamo : prestamos) {
             String isbn = prestamo.getTitle();
@@ -605,90 +676,117 @@ public class Bibliotecario {
             if(prestamo.getStatus().equals("Vencido")){
                 fechaDevolucion = prestamo.getFechaFin();
             }
-            System.out.println("\n"+lang.book_alone + nombreLibro +
+            System.out.println(Colores.dark_green+"\n"+lang.book_alone + nombreLibro +
                                "\n"+lang.isbn_overdue_loans + isbn +
                                "\n"+lang.user_overdue_loans + prestamo.getUsername() +
                                "\n"+lang.borrow_date_admin_loans + prestamo.getFechaInicio() +
-                               "\n"+lang.return_date_overdue_loans + fechaDevolucion);
+                               "\n"+lang.return_date_overdue_loans + fechaDevolucion+Colores.reset);
             tienePrestamos = true;
         }
         
         if (!tienePrestamos) {
-            System.out.println(lang.no_loans_on_month);
+            System.out.println(Colores.red+lang.no_loans_on_month+Colores.reset);
         }
     }
-
+    /**
+     * Metodo que muestra los prestamos activos en la biblioteca
+     */
     public void mostrarPrestamosActivosAdministrador() {
-        System.out.println(lang.active_loans);
+        System.out.println(Colores.light_gray+lang.active_loans+Colores.reset);
         boolean tienePrestamos = false;
     
         for (Prestamos prestamo : prestamos) {
             if (!prestamo.getStatus().equals("Devuelto") && !prestamo.getStatus().equals("Vencido")) { // Filtrar solo los préstamos activos
                 String isbn = prestamo.getTitle();
                 String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
-                System.out.println("\n"+ lang.book_alone + nombreLibro +
+                System.out.println(Colores.cyan+"\n"+ lang.book_alone + nombreLibro +
                                    "\n"+lang.isbn_overdue_loans + isbn +
                                    "\n"+lang.user_overdue_loans + prestamo.getUsername() +
                                    "\n"+ lang.borrow_date_admin_loans  + prestamo.getFechaInicio() +
-                                   "\n"+ lang.return_date_overdue_loans   + prestamo.getFechaFin());
+                                   "\n"+ lang.return_date_overdue_loans   + prestamo.getFechaFin()+Colores.reset);
                 tienePrestamos = true;
             }
         }
     
         if (!tienePrestamos) {
-            System.out.println(lang.no_active_loans);
+            System.out.println(Colores.red+lang.no_active_loans+Colores.reset);
         }
     }
-
+    /**
+     * Metodo que muestra los prestamos activos de un usuario en la biblioteca
+     * @param username
+     */
     public void mostrarPrestamosActivos(String username) {
         if (!users.containsKey(username)) {
-            System.out.println(lang.user_not_found );
+            System.out.println(Colores.red+lang.user_not_found +Colores.reset);
             return;
         }
     
-        System.out.println(lang.active_loans_of + username + ":");
+        System.out.println(Colores.beige+lang.active_loans_of + username + ":"+Colores.reset);
         boolean tienePrestamos = false;
     
         for (Prestamos prestamo : prestamos) {
             if (prestamo.getUsername().equals(username) && prestamo.getStatus().equals("Prestado")) {
                 String isbn = prestamo.getTitle();
                 String nombreLibro = books.containsKey(isbn) ? books.get(isbn).getTitle() : "Libro no encontrado";
-                System.out.println("\n"+ lang.book_alone  + nombreLibro +
+                System.out.println(Colores.bold+"\n"+ lang.book_alone  + nombreLibro +
                                    "\n"+ lang.isbn_overdue_loans + isbn +
                                    "\n"+ lang.borrow_date_admin_loans + prestamo.getFechaInicio() +
-                                   "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin());
+                                   "\n"+ lang.return_date_overdue_loans  + prestamo.getFechaFin()+Colores.reset);
                 tienePrestamos = true;
             }
         }
     
         if (!tienePrestamos) {
-            System.out.println(lang.asset_loans);
+            System.out.println(Colores.dark_red+lang.asset_loans+Colores.reset);
         }
     }
-
+    /**
+     * Metodo que permite agregar un libro a la biblioteca con los datos proporcionados por el usuario y lo guarda en un archivo de libros
+     * @param title
+     * @param author
+     * @param isbn
+     * @param available
+     * @param year
+     * @param genre
+     */
     public void addBook(String title, String author, String isbn, boolean available, int year, String genre) {
         if (books.containsKey(isbn)) {
-            System.out.println(lang.error_book_already_registered);
+            System.out.println(Colores.red+lang.error_book_already_registered+Colores.reset);
             return;
         }
         Book newBook = new Book(title, author, isbn, available, year, genre, 0);
         books.put(isbn, newBook);
         guardarLibros();
     }
-
+    /**
+     * Metodo que permite ver a los usuarios registrados en la biblioteca
+     */
     public HashMap<String, Users> getUsers() {
         return this.users;
     }
-
+    /**
+     * Metodo que permite ver los libros registrados en la biblioteca
+     * @return
+     */
     public HashMap<String, Book> getBooks() {
         return this.books;
     }
-
+    /**
+     * Metodo que permite verificar si las credenciales con las que se inicia sesión son correctas
+     * @param username
+     * @param password
+     * @return
+     */
     public boolean validateUserLoggin(String username, String password) {
         Users user = users.get(username);
         return user != null && user.getPassword().equals(password);
     }
-
+    /**
+     * Metodo que permite obtener el tipo de usuario que se ha registrado en la biblioteca
+     * @param registerUser
+     * @return
+     */
     public String getUserType(String registerUser) {
         Users user = users.get(registerUser);
         return (user != null) ? user.getTipo() : "Desconocido";

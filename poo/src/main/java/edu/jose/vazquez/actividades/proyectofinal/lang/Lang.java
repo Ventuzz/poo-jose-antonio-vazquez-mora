@@ -1,5 +1,7 @@
 package edu.jose.vazquez.actividades.proyectofinal.lang;
-
+/**
+ * Clase que contiene los mensajes que se muestran en la aplicación
+ */
 public class Lang {
 
     public String menu_login;
@@ -101,6 +103,7 @@ public class Lang {
     public String password_showuser;
     public String edad_showuser;
     public String update_loans;
+    public String exit_admin_advance;
     //bibliotecario
 
     public String fantasy;//Fantasía

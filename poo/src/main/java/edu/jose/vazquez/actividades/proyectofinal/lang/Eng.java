@@ -1,5 +1,7 @@
 package edu.jose.vazquez.actividades.proyectofinal.lang;
-
+/**
+ * Clase que contiene los mnensajes en inglés
+ */
 public class Eng extends Lang {
     public Eng() {
         menu_login = 
@@ -53,6 +55,10 @@ menu_user =
         "║     5. Exit                                  ║\n" +
         "╚══════════════════════════════════════════════╝";
 
+exit_admin_advance = 
+        "\n╔═════════════════════════════╗\n" +
+        "║     Exiting the records     ║\n" +
+        "╚═════════════════════════════╝";
 invalid_option = 
       "\n╔════════════════════════════════════════════════════════════════════════════╗\n" +
         "║    Invalid option, you cannot enter numbers that are not in the menu       ║\n" +
